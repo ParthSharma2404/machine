@@ -34,10 +34,4 @@
   }
 }
 
-/* RainbowKit Overrides */
-[data-rk] .ju367v1h {
-  background-color: var(--color-primary) !important;
-  color: var(--color-background) !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-}
+
