@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount } from 'wagmi';
-import { ArrowLeft, ShieldCheck, Activity, LineChart, LockOpen, TrendingUp, Clock, Percent, DollarSign, AlertTriangle, Info, ArrowUpRight, Layers, ExternalLink } from 'lucide-react';
+import { useAccount, useSignMessage } from 'wagmi';
+import { ArrowLeft, ShieldCheck, Activity, LineChart, LockOpen, TrendingUp, Clock, Percent, DollarSign, AlertTriangle, Info, ArrowUpRight, Layers, ExternalLink, RefreshCw, CheckCircle2, Zap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
@@ -69,8 +69,34 @@ function InteractiveChart({ apy }: { apy: number }) {
 export default function PoolDetailClient({ pool }: { pool: any }) {
   const router = useRouter();
   const { isConnected } = useAccount();
+  const { signMessageAsync } = useSignMessage();
   const [amount, setAmount] = useState('');
   const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw'>('deposit');
+  const [zapState, setZapState] = useState<'idle' | 'calculating' | 'review' | 'signing' | 'success'>('idle');
+  const [routeData, setRouteData] = useState<any>(null);
+
+  const handleCalculateRoute = () => {
+    setZapState('calculating');
+    setTimeout(() => {
+      const devFee = (parseFloat(amount) * 0.0025).toFixed(2);
+      setRouteData({
+        networkFee: (Math.random() * 2 + 0.5).toFixed(2),
+        slippage: '0.1%',
+        developerFee: devFee
+      });
+      setZapState('review');
+    }, 1500);
+  };
+
+  const handleConfirmZap = async () => {
+    try {
+      setZapState('signing');
+      await signMessageAsync({ message: `YieldPulse Execution:\n\nApprove routing of ${amount} ${pool.symbol} into ${pool.project} ${pool.chain}.\nDeveloper Fee (0.25%): $${routeData.developerFee}\n\nThis is a simulated signature for the YieldPulse portfolio engine.` });
+      setZapState('success');
+    } catch (err) {
+      setZapState('review');
+    }
+  };
 
   const desc = protocolDescriptions[pool.project] || protocolDescriptions['default'];
   const estimatedDaily = amount ? (parseFloat(amount) * pool.apy / 100 / 365).toFixed(4) : '0.0000';
@@ -198,10 +224,50 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
 
                 {!isConnected ? (
                   <div className="w-full flex justify-center py-2"><ConnectButton /></div>
-                ) : (
-                  <button className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98] hover:shadow-xl">
-                    {activeTab === 'deposit' ? `Deposit ${pool.symbol}` : `Withdraw ${pool.symbol}`}
+                ) : activeTab === 'withdraw' ? (
+                  <button className="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-4 rounded-xl shadow-sm transition-all active:scale-[0.98]">
+                    Withdraw {pool.symbol}
                   </button>
+                ) : zapState === 'success' ? (
+                  <div className="w-full bg-emerald-50 border border-emerald-200 text-emerald-700 p-6 rounded-xl flex flex-col items-center gap-3">
+                    <CheckCircle2 className="w-10 h-10 text-emerald-500" />
+                    <div className="text-center">
+                      <p className="font-bold text-lg">Deposit Successful!</p>
+                      <p className="text-sm opacity-80">Your funds are now generating yield.</p>
+                    </div>
+                    <button onClick={() => { setZapState('idle'); setAmount(''); }} className="mt-2 text-sm font-semibold hover:underline">New Deposit</button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {(zapState === 'review' || zapState === 'signing') && routeData && (
+                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1"><Zap className="w-3 h-3 text-amber-500" /> Smart Route Found</h4>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-500">Network Fee (Est.)</span>
+                          <span className="font-medium text-slate-700">${routeData.networkFee}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-500">Max Slippage</span>
+                          <span className="font-medium text-slate-700">{routeData.slippage}</span>
+                        </div>
+                        <div className="flex justify-between text-sm pt-2 border-t border-slate-200">
+                          <span className="text-slate-500 font-medium">YieldPulse Fee (0.25%)</span>
+                          <span className="font-mono font-bold text-primary">${routeData.developerFee}</span>
+                        </div>
+                      </motion.div>
+                    )}
+                    
+                    <button 
+                      onClick={zapState === 'idle' ? handleCalculateRoute : handleConfirmZap} 
+                      disabled={!amount || parseFloat(amount) <= 0 || zapState === 'calculating' || zapState === 'signing'}
+                      className="w-full bg-primary hover:bg-primary-hover disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98] hover:shadow-xl flex items-center justify-center gap-2"
+                    >
+                      {zapState === 'calculating' ? <><RefreshCw className="w-5 h-5 animate-spin" /> Finding Best Route...</> :
+                       zapState === 'signing' ? <><RefreshCw className="w-5 h-5 animate-spin" /> Check Wallet...</> :
+                       zapState === 'review' ? 'Confirm Zap in Wallet' :
+                       `Deposit ${pool.symbol}`}
+                    </button>
+                  </div>
                 )}
 
                 <div className="mt-4 flex items-center justify-center gap-4 text-xs text-slate-400">
