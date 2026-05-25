@@ -127,7 +127,7 @@ const fetchQuote = async (
   const decimals = isUsdc ? 6 : 18;
   const parsedAmount = (parseFloat(amount) * Math.pow(10, decimals)).toFixed(0);
 
-  const url = `https://li.quest/v1/quote?fromChain=${fromChainId}&toChain=${toChainId}&fromToken=${fromTokenAddress}&toToken=${toTokenAddress}&fromAmount=${parsedAmount}&fromAddress=${userAddress}&fee=0.0025&feeReceiver=0x809dE57cddA3F5CAFce3F89DA9ad9269E1fFfA52`;
+  const url = `https://li.quest/v1/quote?fromChain=${fromChainId}&toChain=${toChainId}&fromToken=${fromTokenAddress}&toToken=${toTokenAddress}&fromAmount=${parsedAmount}&fromAddress=${userAddress}&fee=0.005&feeReceiver=0x809dE57cddA3F5CAFce3F89DA9ad9269E1fFfA52`;
   
   const response = await fetch(url);
   if (!response.ok) {
@@ -166,7 +166,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
     const isSimulated = address === '0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
     if (isSimulated) {
       setTimeout(() => {
-        const devFee = (parseFloat(amount) * 0.0025).toFixed(4);
+        const devFee = (parseFloat(amount) * 0.005).toFixed(4);
         setRouteData({
           networkFee: '0.05',
           slippage: '0.5%',
@@ -199,7 +199,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
       setRouteData({
         networkFee: networkFeeUsd,
         slippage: '0.5%',
-        developerFee: (parseFloat(amount) * 0.0025).toFixed(4),
+        developerFee: (parseFloat(amount) * 0.005).toFixed(4),
         transactionRequest: quote.transactionRequest,
         rawQuote: quote
       });
@@ -219,7 +219,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
       
       const isSimulated = address === '0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
       if (isSimulated) {
-        await signMessageAsync({ message: `YieldPulse Simulation:\n\nApprove mock routing of ${amount} ${payToken} into ${pool.project} ${pool.chain}.\nDeveloper Fee (0.25%): ${routeData.developerFee} ${payToken}` });
+        await signMessageAsync({ message: `YieldPulse Simulation:\n\nApprove mock routing of ${amount} ${payToken} into ${pool.project} ${pool.chain}.\nDeveloper Fee (0.5%): ${routeData.developerFee} ${payToken}` });
         setZapState('success');
         return;
       }
@@ -444,7 +444,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
                           <span className="font-medium text-slate-700">{routeData.slippage}</span>
                         </div>
                         <div className="flex justify-between text-sm pt-2 border-t border-slate-200">
-                          <span className="text-slate-500 font-medium">Developer Fee (0.25%)</span>
+                          <span className="text-slate-500 font-medium">Developer Fee (0.5%)</span>
                           <span className="font-mono font-bold text-primary">{routeData.developerFee} {payToken}</span>
                         </div>
                       </motion.div>
