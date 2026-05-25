@@ -1,18 +1,17 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-background: #0B1014;
-  --color-foreground: #ffffff;
-  --color-primary: #00E599;
-  --color-primary-hover: #00c985;
-  --color-primary-glow: rgba(0, 229, 153, 0.15);
+  --color-background: #F8FAFC;
+  --color-foreground: #0F172A;
+  --color-primary: #1E3A8A;
+  --color-primary-hover: #1E40AF;
   
-  --color-card: #121821;
-  --color-card-hover: #19212d;
-  --color-border: #1e293b;
+  --color-card: #FFFFFF;
+  --color-card-hover: #F1F5F9;
+  --color-border: #E2E8F0;
   
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #475569;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748B;
   
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -26,12 +25,10 @@
 
 @layer components {
   .glass-card {
-    @apply bg-card/80 backdrop-blur-md border border-border rounded-xl shadow-xl transition-all duration-200;
+    @apply bg-card border border-border rounded-xl shadow-sm transition-all duration-200;
   }
   
   .glass-card:hover {
-    @apply border-primary/30 shadow-[0_0_20px_rgba(0,229,153,0.1)];
+    @apply shadow-md border-slate-300;
   }
 }
-
-
