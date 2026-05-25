@@ -3,6 +3,7 @@ import json
 import ssl
 import sys
 import os
+import math
 
 # Rich pre-seeded fallback database of 50+ real pools across networks and protocols
 SEED_POOLS = [
@@ -106,20 +107,43 @@ def process_and_filter_pools(raw_pools):
         if not base_asset:
             continue
             
+        apy_val = float(apy)
+        tvl_val = int(tvl)
+        exposure_val = p.get("exposure", "single")
+        risk_level = "Low" if apy_val < 6 else "Medium" if apy_val < 12 else "High"
+        
+        # Calculate YP Score (0-100)
+        # APY Score (max 60): linear up to 30% APY
+        apy_score = min((apy_val / 30.0) * 60, 60)
+        
+        # TVL Score (max 30): logarithmic from $1M to $1B
+        tvl_log = math.log10(max(tvl_val, 1))
+        tvl_score = min(max((tvl_log - 6) / 3 * 30, 0), 30)
+        
+        # Risk Bonus/Penalty (max 10)
+        risk_score = 10 if exposure_val == "single" else 5
+        if risk_level == "High":
+            risk_score -= 10
+        elif risk_level == "Medium":
+            risk_score -= 5
+            
+        yp_score = round(max(min(apy_score + tvl_score + risk_score, 100), 0))
+
         processed.append({
             "pool": pool_id,
             "project": project,
             "symbol": symbol,
             "baseAsset": base_asset,
             "chain": chain,
-            "apy": round(float(apy), 2),
-            "tvlUsd": int(tvl),
-            "exposure": p.get("exposure", "single"),
-            "riskLevel": "Low" if apy < 6 else "Medium" if apy < 12 else "High"
+            "apy": round(apy_val, 2),
+            "tvlUsd": tvl_val,
+            "exposure": exposure_val,
+            "riskLevel": risk_level,
+            "yieldScore": yp_score
         })
         
-    # Sort by APY descending
-    processed.sort(key=lambda x: x["apy"], reverse=True)
+    # Sort by YieldPulse Score descending
+    processed.sort(key=lambda x: x["yieldScore"], reverse=True)
     return processed
 
 def main():
