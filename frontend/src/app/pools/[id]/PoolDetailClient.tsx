@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount, useSignMessage } from 'wagmi';
+import { useAccount, useSignMessage, useConnect } from 'wagmi';
+import { mock } from 'wagmi/connectors';
 import { ArrowLeft, ShieldCheck, Activity, LineChart, LockOpen, TrendingUp, Clock, Percent, DollarSign, AlertTriangle, Info, ArrowUpRight, Layers, ExternalLink, RefreshCw, CheckCircle2, Zap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -70,6 +71,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
   const router = useRouter();
   const { isConnected } = useAccount();
   const { signMessageAsync } = useSignMessage();
+  const { connect } = useConnect();
   const [amount, setAmount] = useState('');
   const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw'>('deposit');
   const [zapState, setZapState] = useState<'idle' | 'calculating' | 'review' | 'signing' | 'success'>('idle');
@@ -223,7 +225,12 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
                 )}
 
                 {!isConnected ? (
-                  <div className="w-full flex justify-center py-2"><ConnectButton /></div>
+                  <div className="w-full flex flex-col items-center py-2">
+                    <ConnectButton />
+                    <button onClick={() => connect({ connector: mock({ accounts: ['0x71C7656EC7ab88b098defB751B7401B5f6d8976F'] }) })} className="mt-4 text-xs font-semibold text-slate-400 hover:text-primary transition-colors hover:underline">
+                      Simulate Wallet Connection
+                    </button>
+                  </div>
                 ) : activeTab === 'withdraw' ? (
                   <button className="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-4 rounded-xl shadow-sm transition-all active:scale-[0.98]">
                     Withdraw {pool.symbol}
