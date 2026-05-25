@@ -109,7 +109,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
           {[
             { label: 'Net APY', value: `${pool.apy.toFixed(2)}%`, icon: <Percent className="w-4 h-4 text-emerald-500" />, valueClass: 'text-emerald-600' },
             { label: 'Total Value Locked', value: `$${(pool.tvlUsd / 1e6).toFixed(1)}M`, icon: <DollarSign className="w-4 h-4 text-blue-500" />, valueClass: 'text-slate-900' },
-            { label: 'Risk Tier', value: pool.riskLevel, icon: <AlertTriangle className="w-4 h-4 text-amber-500" />, valueClass: pool.riskLevel === 'Low' ? 'text-emerald-600' : pool.riskLevel === 'Medium' ? 'text-amber-600' : 'text-rose-600' },
+            { label: 'YP Score', value: `${pool.yieldScore}/100`, icon: <Activity className="w-4 h-4 text-primary" />, valueClass: pool.yieldScore >= 80 ? 'text-emerald-600' : pool.yieldScore >= 50 ? 'text-amber-600' : 'text-rose-600' },
             { label: 'Exposure', value: pool.exposure === 'single' ? 'Single Asset' : 'Multi-Asset', icon: <Layers className="w-4 h-4 text-indigo-500" />, valueClass: 'text-slate-900' },
           ].map((s, i) => (
             <div key={i} className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">

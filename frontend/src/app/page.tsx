@@ -204,7 +204,7 @@ export default function Home() {
                       <th className="px-6 py-4 font-semibold">Network</th>
                       <th className="px-6 py-4 font-semibold">Net APY</th>
                       <th className="px-6 py-4 font-semibold">TVL</th>
-                      <th className="px-6 py-4 font-semibold">Risk</th>
+                      <th className="px-6 py-4 font-semibold">YP Score</th>
                       <th className="px-6 py-4 font-semibold text-right">Action</th>
                     </tr>
                   </thead>
@@ -222,7 +222,12 @@ export default function Home() {
                         <td className="px-6 py-5"><span className="font-mono text-emerald-600 font-bold text-lg">{pool.apy.toFixed(2)}%</span></td>
                         <td className="px-6 py-5 font-mono text-sm text-slate-500">${(pool.tvlUsd / 1e6).toFixed(1)}M</td>
                         <td className="px-6 py-5">
-                          <span className={`text-xs px-2.5 py-1 rounded-lg font-semibold ${pool.riskLevel === 'Low' ? 'bg-emerald-50 text-emerald-600' : pool.riskLevel === 'Medium' ? 'bg-amber-50 text-amber-600' : 'bg-rose-50 text-rose-600'}`}>{pool.riskLevel}</span>
+                          <div className="flex items-center gap-2">
+                            <div className="w-12 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                              <div className={`h-full rounded-full ${pool.yieldScore >= 80 ? 'bg-emerald-500' : pool.yieldScore >= 50 ? 'bg-amber-500' : 'bg-rose-500'}`} style={{ width: `${pool.yieldScore}%` }} />
+                            </div>
+                            <span className={`text-xs font-bold ${pool.yieldScore >= 80 ? 'text-emerald-600' : pool.yieldScore >= 50 ? 'text-amber-600' : 'text-rose-600'}`}>{pool.yieldScore}</span>
+                          </div>
                         </td>
                         <td className="px-6 py-5 text-right">
                           <span className="inline-flex items-center gap-1 text-sm font-medium text-slate-400 group-hover:text-primary transition-colors">Deposit <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></span>
