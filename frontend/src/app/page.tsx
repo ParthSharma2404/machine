@@ -112,20 +112,30 @@ export default function Home() {
               <p className="text-slate-500 max-w-xl mx-auto">Every feature is designed to maximize returns while minimizing risk.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                { icon: <BarChart3 className="w-7 h-7" />, color: 'blue', title: 'Highest Market Yields', desc: 'Our aggregator scans Aave, Curve, Pendle, and dozens of protocols in real-time to surface the absolute highest returns available in DeFi.', tag: 'Real-Time Scanning' },
-                { icon: <ShieldCheck className="w-7 h-7" />, color: 'emerald', title: 'Audited & Secure', desc: 'Every pool listed has passed rigorous smart contract audits by firms like OpenZeppelin and Trail of Bits. We never list unverified protocols.', tag: 'Triple-Audited' },
-                { icon: <LockOpen className="w-7 h-7" />, color: 'indigo', title: 'Instant Liquidity', desc: 'Zero lock-up periods. Withdraw your initial deposit and all accumulated interest instantly, directly to your wallet, at any time.', tag: 'No Lock-ups' },
-              ].map((f, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="gradient-border shadow-sm hover:shadow-xl transition-all duration-300 group">
-                  <div className="p-8 pt-10">
-                    <div className={`w-14 h-14 rounded-2xl bg-${f.color}-50 text-${f.color}-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>{f.icon}</div>
-                    <span className={`text-xs font-bold uppercase tracking-wider text-${f.color}-500 mb-3 block`}>{f.tag}</span>
-                    <h3 className="text-xl font-bold text-slate-900 mb-3">{f.title}</h3>
-                    <p className="text-slate-500 text-sm leading-relaxed">{f.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
+              <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="gradient-border shadow-sm hover:shadow-xl transition-all duration-300 group">
+                <div className="p-8 pt-10">
+                  <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><BarChart3 className="w-7 h-7" /></div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-blue-500 mb-3 block">Real-Time Scanning</span>
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">Highest Market Yields</h3>
+                  <p className="text-slate-500 text-sm leading-relaxed">Our aggregator scans Aave, Curve, Pendle, and dozens of protocols in real-time to surface the absolute highest returns available in DeFi.</p>
+                </div>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="gradient-border shadow-sm hover:shadow-xl transition-all duration-300 group">
+                <div className="p-8 pt-10">
+                  <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><ShieldCheck className="w-7 h-7" /></div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-500 mb-3 block">Triple-Audited</span>
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">Audited &amp; Secure</h3>
+                  <p className="text-slate-500 text-sm leading-relaxed">Every pool listed has passed rigorous smart contract audits by firms like OpenZeppelin and Trail of Bits. We never list unverified protocols.</p>
+                </div>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="gradient-border shadow-sm hover:shadow-xl transition-all duration-300 group">
+                <div className="p-8 pt-10">
+                  <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><LockOpen className="w-7 h-7" /></div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-indigo-500 mb-3 block">No Lock-ups</span>
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">Instant Liquidity</h3>
+                  <p className="text-slate-500 text-sm leading-relaxed">Zero lock-up periods. Withdraw your initial deposit and all accumulated interest instantly, directly to your wallet, at any time.</p>
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -140,20 +150,33 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
               <div className="hidden md:block absolute top-16 left-[20%] right-[20%] h-[2px] bg-gradient-to-r from-blue-200 via-emerald-200 to-indigo-200 z-0" />
-              {[
-                { step: 1, icon: <ArrowDownToLine className="w-8 h-8" />, color: 'blue', title: 'Deposit Assets', desc: 'Connect your Web3 wallet (MetaMask, WalletConnect, Coinbase) and deposit stablecoins or crypto into a secure smart vault of your choice.' },
-                { step: 2, icon: <RefreshCw className="w-8 h-8" />, color: 'emerald', title: 'Auto-Compound', desc: 'Our smart contracts automatically harvest yields every 24 hours and restake them — exponentially accelerating your effective APY over time.' },
-                { step: 3, icon: <HandCoins className="w-8 h-8" />, color: 'indigo', title: 'Withdraw Anytime', desc: 'Withdraw your original capital plus all compounded interest instantly. No waiting periods, no penalties, no hidden fees. It goes straight to your wallet.' },
-              ].map((s, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.15 }} className="relative z-10 text-center">
-                  <div className={`w-20 h-20 rounded-2xl bg-white border-2 border-${s.color}-100 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-${s.color}-500/10 relative`}>
-                    <div className={`absolute -top-3 -right-3 w-8 h-8 rounded-full bg-${s.color}-600 text-white font-bold flex items-center justify-center text-sm shadow-md`}>{s.step}</div>
-                    <span className={`text-${s.color}-600`}>{s.icon}</span>
-                  </div>
-                  <h4 className="text-lg font-bold text-slate-900 mb-3">{s.title}</h4>
-                  <p className="text-sm text-slate-500 leading-relaxed max-w-xs mx-auto">{s.desc}</p>
-                </motion.div>
-              ))}
+              
+              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative z-10 text-center">
+                <div className="w-20 h-20 rounded-2xl bg-white border-2 border-blue-100 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-blue-500/10 relative">
+                  <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow-md">1</div>
+                  <ArrowDownToLine className="w-8 h-8 text-blue-600" />
+                </div>
+                <h4 className="text-lg font-bold text-slate-900 mb-3">Deposit Assets</h4>
+                <p className="text-sm text-slate-500 leading-relaxed max-w-xs mx-auto">Connect your Web3 wallet (MetaMask, WalletConnect, Coinbase) and deposit stablecoins or crypto into a secure smart vault of your choice.</p>
+              </motion.div>
+
+              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="relative z-10 text-center">
+                <div className="w-20 h-20 rounded-2xl bg-white border-2 border-emerald-100 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-emerald-500/10 relative">
+                  <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shadow-md">2</div>
+                  <RefreshCw className="w-8 h-8 text-emerald-600" />
+                </div>
+                <h4 className="text-lg font-bold text-slate-900 mb-3">Auto-Compound</h4>
+                <p className="text-sm text-slate-500 leading-relaxed max-w-xs mx-auto">Our smart contracts automatically harvest yields every 24 hours and restake them — exponentially accelerating your effective APY over time.</p>
+              </motion.div>
+
+              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="relative z-10 text-center">
+                <div className="w-20 h-20 rounded-2xl bg-white border-2 border-indigo-100 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-indigo-500/10 relative">
+                  <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-sm shadow-md">3</div>
+                  <HandCoins className="w-8 h-8 text-indigo-600" />
+                </div>
+                <h4 className="text-lg font-bold text-slate-900 mb-3">Withdraw Anytime</h4>
+                <p className="text-sm text-slate-500 leading-relaxed max-w-xs mx-auto">Withdraw your original capital plus all compounded interest instantly. No waiting periods, no penalties, no hidden fees. It goes straight to your wallet.</p>
+              </motion.div>
             </div>
           </div>
         </section>
