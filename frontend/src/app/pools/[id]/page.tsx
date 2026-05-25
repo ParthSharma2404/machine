@@ -7,8 +7,9 @@ export function generateStaticParams() {
   }));
 }
 
-export default function Page({ params }: { params: { id: string } }) {
-  const pool = poolsData.find((p) => p.pool === params.id);
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const pool = poolsData.find((p) => p.pool === resolvedParams.id);
   
   if (!pool) {
     return <div>Pool not found</div>;
