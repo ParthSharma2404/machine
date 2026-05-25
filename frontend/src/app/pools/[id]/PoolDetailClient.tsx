@@ -40,9 +40,9 @@ function generateChartData(apy: number) {
 function ChartTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-slate-900/90 backdrop-blur-md border border-white/10 rounded-xl px-4 py-3 shadow-xl shadow-black/50">
-      <p className="text-xs text-slate-400 mb-1">{label}</p>
-      <p className="text-lg font-bold font-mono text-emerald-400 stat-glow">{payload[0].value.toFixed(2)}%</p>
+    <div className="bg-white/90 backdrop-blur-md border border-slate-200 rounded-xl px-4 py-3 shadow-xl">
+      <p className="text-xs text-slate-500 mb-1">{label}</p>
+      <p className="text-lg font-bold font-mono text-emerald-600">{payload[0].value.toFixed(2)}%</p>
     </div>
   );
 }
@@ -54,15 +54,15 @@ function InteractiveChart({ apy }: { apy: number }) {
       <AreaChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
         <defs>
           <linearGradient id="apyGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#10B981" stopOpacity={0.4} />
+            <stop offset="5%" stopColor="#10B981" stopOpacity={0.2} />
             <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
         <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} interval={6} />
         <YAxis tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} domain={['dataMin - 0.5', 'dataMax + 0.5']} />
-        <Tooltip content={<ChartTooltip />} cursor={{ stroke: '#334155', strokeDasharray: '4 4' }} />
-        <Area type="monotone" dataKey="apy" stroke="#10B981" strokeWidth={2.5} fill="url(#apyGradient)" activeDot={{ r: 6, fill: '#10B981', stroke: '#030712', strokeWidth: 2 }} />
+        <Tooltip content={<ChartTooltip />} cursor={{ stroke: '#94a3b8', strokeDasharray: '4 4' }} />
+        <Area type="monotone" dataKey="apy" stroke="#10B981" strokeWidth={2.5} fill="url(#apyGradient)" activeDot={{ r: 6, fill: '#10B981', stroke: '#ffffff', strokeWidth: 2 }} />
       </AreaChart>
     </ResponsiveContainer>
   );
@@ -262,42 +262,44 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
   const estimatedYearly = amount ? (parseFloat(amount) * pool.apy / 100).toFixed(2) : '0.00';
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border px-6 py-3 shadow-sm">
+    <div className="min-h-screen bg-grid-green text-foreground relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white pointer-events-none" />
+      
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-6 py-3 shadow-sm relative">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <button onClick={() => router.back()} className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 flex items-center justify-center transition-colors"><ArrowLeft className="w-4 h-4 text-slate-300" /></button>
+            <button onClick={() => router.back()} className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100 flex items-center justify-center transition-colors"><ArrowLeft className="w-4 h-4 text-slate-600" /></button>
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push('/')}>
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.5)]"><Activity className="text-white w-4 h-4" /></div>
-              <span className="font-bold text-xl tracking-tight text-white">Yeild<span className="text-primary">Pulse</span></span>
+              <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center shadow-[0_2px_10px_rgba(16,185,129,0.3)]"><Activity className="text-white w-4 h-4" /></div>
+              <span className="font-bold text-xl tracking-tight text-slate-900">Yeild<span className="text-emerald-600">Pulse</span></span>
             </div>
           </div>
           <ConnectButton />
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 pt-10 pb-24">
+      <main className="max-w-7xl mx-auto px-6 pt-10 pb-24 relative z-10">
         {/* Title Row */}
-        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="mb-10 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
           <div className="flex flex-wrap items-center gap-3 mb-3">
-            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/5 flex items-center justify-center text-lg font-bold text-slate-300">{pool.project.substring(0, 2).toUpperCase()}</div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white">{pool.project}</h1>
-            <span className="font-mono text-lg font-medium text-slate-400">{pool.symbol}</span>
-            <span className="px-3 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-full text-sm font-semibold">{pool.chain}</span>
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-lg font-bold text-emerald-600">{pool.project.substring(0, 2).toUpperCase()}</div>
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-900">{pool.project}</h1>
+            <span className="font-mono text-lg font-medium text-slate-500">{pool.symbol}</span>
+            <span className="px-3 py-1 bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full text-sm font-semibold">{pool.chain}</span>
           </div>
-          <p className="text-slate-400 text-base max-w-2xl">{desc}</p>
+          <p className="text-slate-500 text-base max-w-2xl">{desc}</p>
         </motion.div>
 
         {/* Quick Stats Strip */}
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { label: 'Net APY', value: `${pool.apy.toFixed(2)}%`, icon: <Percent className="w-4 h-4 text-emerald-400" />, valueClass: 'text-emerald-400 stat-glow' },
-            { label: 'Total Value Locked', value: `$${(pool.tvlUsd / 1e6).toFixed(1)}M`, icon: <DollarSign className="w-4 h-4 text-blue-400" />, valueClass: 'text-white' },
-            { label: 'YP Score', value: `${pool.yieldScore}/100`, icon: <Activity className="w-4 h-4 text-primary" />, valueClass: pool.yieldScore >= 80 ? 'text-emerald-400' : pool.yieldScore >= 50 ? 'text-amber-400' : 'text-rose-400' },
-            { label: 'Exposure', value: pool.exposure === 'single' ? 'Single Asset' : 'Multi-Asset', icon: <Layers className="w-4 h-4 text-indigo-400" />, valueClass: 'text-white' },
+            { label: 'Net APY', value: `${pool.apy.toFixed(2)}%`, icon: <Percent className="w-4 h-4 text-emerald-500" />, valueClass: 'text-emerald-600' },
+            { label: 'Total Value Locked', value: `$${(pool.tvlUsd / 1e6).toFixed(1)}M`, icon: <DollarSign className="w-4 h-4 text-slate-500" />, valueClass: 'text-slate-900' },
+            { label: 'YP Score', value: `${pool.yieldScore}/100`, icon: <Activity className="w-4 h-4 text-emerald-500" />, valueClass: pool.yieldScore >= 80 ? 'text-emerald-600' : pool.yieldScore >= 50 ? 'text-amber-600' : 'text-rose-600' },
+            { label: 'Exposure', value: pool.exposure === 'single' ? 'Single Asset' : 'Multi-Asset', icon: <Layers className="w-4 h-4 text-slate-500" />, valueClass: 'text-slate-900' },
           ].map((s, i) => (
             <div key={i} className="glass-card px-5 py-4">
-              <div className="flex items-center gap-2 mb-2">{s.icon}<span className="text-xs font-medium text-slate-400 uppercase tracking-wider">{s.label}</span></div>
+              <div className="flex items-center gap-2 mb-2">{s.icon}<span className="text-xs font-medium text-slate-500 uppercase tracking-wider">{s.label}</span></div>
               <p className={`text-2xl font-bold font-mono ${s.valueClass}`}>{s.value}</p>
             </div>
           ))}
@@ -307,30 +309,30 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
           {/* Left Column */}
           <div className="flex-1 space-y-8">
             {/* APY Chart */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="gradient-border shadow-lg transition-shadow hover:!transform-none">
-              <div className="p-6 pt-8 bg-white/5 backdrop-blur-xl">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="gradient-border shadow-md transition-shadow hover:!transform-none">
+              <div className="p-6 pt-8 bg-white">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-lg font-bold text-white flex items-center gap-2"><LineChart className="w-5 h-5 text-blue-400" /> APY Performance (30d)</h2>
-                  <span className="flex items-center gap-1 text-sm font-semibold text-emerald-400"><TrendingUp className="w-4 h-4" /> +{(pool.apy * 0.05).toFixed(2)}%</span>
+                  <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2"><LineChart className="w-5 h-5 text-emerald-500" /> APY Performance (30d)</h2>
+                  <span className="flex items-center gap-1 text-sm font-semibold text-emerald-600"><TrendingUp className="w-4 h-4" /> +{(pool.apy * 0.05).toFixed(2)}%</span>
                 </div>
                 <InteractiveChart apy={pool.apy} />
               </div>
             </motion.div>
 
             {/* Security */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="gradient-border shadow-lg transition-shadow hover:!transform-none">
-              <div className="p-6 pt-8 bg-white/5 backdrop-blur-xl">
-                <h2 className="text-lg font-bold text-white mb-6 flex items-center gap-2"><ShieldCheck className="w-5 h-5 text-blue-400" /> Security & Risk Analysis</h2>
-                <div className="space-y-0 divide-y divide-white/10">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="gradient-border shadow-md transition-shadow hover:!transform-none">
+              <div className="p-6 pt-8 bg-white">
+                <h2 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2"><ShieldCheck className="w-5 h-5 text-emerald-500" /> Security & Risk Analysis</h2>
+                <div className="space-y-0 divide-y divide-slate-100">
                   {[
-                    { label: 'Smart Contract Audit', value: 'Verified', vClass: 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' },
-                    { label: 'Audit Firm', value: 'OpenZeppelin', vClass: 'text-blue-400 bg-blue-500/10 border border-blue-500/20' },
-                    { label: 'Asset Exposure', value: pool.exposure === 'single' ? 'Single Asset' : 'Multi-Asset LP', vClass: 'text-slate-300 bg-white/10 border border-white/5' },
-                    { label: 'Overall Risk', value: `${pool.riskLevel} Risk`, vClass: pool.riskLevel === 'Low' ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' : pool.riskLevel === 'Medium' ? 'text-amber-400 bg-amber-500/10 border border-amber-500/20' : 'text-rose-400 bg-rose-500/10 border border-rose-500/20' },
-                    { label: 'Withdrawal', value: 'Instant', vClass: 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' },
+                    { label: 'Smart Contract Audit', value: 'Verified', vClass: 'text-emerald-700 bg-emerald-50 border border-emerald-200' },
+                    { label: 'Audit Firm', value: 'OpenZeppelin', vClass: 'text-slate-700 bg-slate-50 border border-slate-200' },
+                    { label: 'Asset Exposure', value: pool.exposure === 'single' ? 'Single Asset' : 'Multi-Asset LP', vClass: 'text-slate-600 bg-slate-50 border border-slate-200' },
+                    { label: 'Overall Risk', value: `${pool.riskLevel} Risk`, vClass: pool.riskLevel === 'Low' ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' : pool.riskLevel === 'Medium' ? 'text-amber-700 bg-amber-50 border border-amber-200' : 'text-rose-700 bg-rose-50 border border-rose-200' },
+                    { label: 'Withdrawal', value: 'Instant', vClass: 'text-emerald-700 bg-emerald-50 border border-emerald-200' },
                   ].map((row, i) => (
                     <div key={i} className="flex justify-between items-center py-4">
-                      <span className="text-sm text-slate-400">{row.label}</span>
+                      <span className="text-sm text-slate-500">{row.label}</span>
                       <span className={`text-xs font-semibold px-3 py-1 rounded-lg ${row.vClass}`}>{row.value}</span>
                     </div>
                   ))}
@@ -341,12 +343,12 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
 
           {/* Right Column: Trade Widget */}
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="w-full lg:w-[420px]">
-            <div className="gradient-border shadow-2xl transition-shadow sticky top-24 hover:!transform-none shadow-[0_0_40px_rgba(59,130,246,0.1)]">
-              <div className="p-6 pt-8 bg-black/40 backdrop-blur-2xl">
+            <div className="gradient-border shadow-xl transition-shadow sticky top-24 hover:!transform-none">
+              <div className="p-6 pt-8 bg-white">
                 {/* Tabs */}
-                <div className="flex bg-slate-900 border border-white/10 rounded-xl p-1 mb-6">
+                <div className="flex bg-slate-50 border border-slate-200 rounded-xl p-1 mb-6">
                   {(['deposit', 'withdraw'] as const).map(tab => (
-                    <button key={tab} onClick={() => { setActiveTab(tab); setZapState('idle'); setAmount(''); setError(''); }} className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === tab ? 'bg-white/10 shadow-sm text-white' : 'text-slate-500 hover:text-slate-300'}`}>{tab === 'deposit' ? 'Deposit' : 'Withdraw'}</button>
+                    <button key={tab} onClick={() => { setActiveTab(tab); setZapState('idle'); setAmount(''); setError(''); }} className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === tab ? 'bg-white shadow-sm text-emerald-600 border border-slate-200' : 'text-slate-500 hover:text-slate-700'}`}>{tab === 'deposit' ? 'Deposit' : 'Withdraw'}</button>
                   ))}
                 </div>
 
@@ -358,7 +360,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
                         <button 
                           key={token} 
                           onClick={() => { setPayToken(token); setAmount(''); setZapState('idle'); setError(''); }} 
-                          className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all border ${payToken === token ? 'bg-blue-600 border-blue-500 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]' : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10'}`}
+                          className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all border ${payToken === token ? 'bg-emerald-50 border-emerald-500 text-emerald-700 shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100'}`}
                         >
                           {token}
                         </button>
@@ -369,19 +371,19 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
 
                 <div className="mb-6">
                   <div className="flex justify-between text-sm mb-2">
-                    <span className="text-slate-400 font-medium">Amount</span>
-                    <span className="text-slate-400 text-xs">Balance: <span className="font-mono font-semibold text-white">{isConnected ? displayBalance : '0.00'} {activeTab === 'deposit' ? payToken : pool.symbol}</span></span>
+                    <span className="text-slate-600 font-medium">Amount</span>
+                    <span className="text-slate-500 text-xs">Balance: <span className="font-mono font-semibold text-slate-900">{isConnected ? displayBalance : '0.00'} {activeTab === 'deposit' ? payToken : pool.symbol}</span></span>
                   </div>
                   <div className="relative">
-                    <input type="number" value={amount} onChange={(e) => { setAmount(e.target.value); setZapState('idle'); setError(''); }} placeholder="0.00" className="w-full bg-slate-900 border border-white/10 rounded-xl py-4 pl-4 pr-20 text-lg font-mono text-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-slate-600" />
-                    <button onClick={() => setAmount('10000')} className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 px-3 py-1.5 rounded-lg transition-colors">MAX</button>
+                    <input type="number" value={amount} onChange={(e) => { setAmount(e.target.value); setZapState('idle'); setError(''); }} placeholder="0.00" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 pl-4 pr-20 text-lg font-mono text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 transition-all placeholder:text-slate-400" />
+                    <button onClick={() => setAmount('10000')} className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-lg transition-colors">MAX</button>
                   </div>
                 </div>
 
                 {/* Estimated Returns */}
                 {amount && parseFloat(amount) > 0 && (
-                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mb-6 bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4">
-                    <p className="text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-3 flex items-center gap-1"><TrendingUp className="w-3 h-3" /> Estimated Returns at {pool.apy.toFixed(2)}% APY</p>
+                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mb-6 bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+                    <p className="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-3 flex items-center gap-1"><TrendingUp className="w-3 h-3" /> Estimated Returns at {pool.apy.toFixed(2)}% APY</p>
                     <div className="space-y-2">
                       {[
                         { label: 'Daily', value: estimatedDaily },
@@ -389,8 +391,8 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
                         { label: 'Yearly', value: estimatedYearly },
                       ].map((r, i) => (
                         <div key={i} className="flex justify-between text-sm">
-                          <span className="text-emerald-500/70">{r.label}</span>
-                          <span className="font-mono font-semibold text-emerald-400">+${r.value}</span>
+                          <span className="text-emerald-700/70">{r.label}</span>
+                          <span className="font-mono font-semibold text-emerald-600">+${r.value}</span>
                         </div>
                       ))}
                     </div>
@@ -401,63 +403,63 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
                   <div className="w-full flex flex-col items-center py-2">
                     <ConnectButton />
                     
-                    <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl text-xs text-blue-400 flex gap-3 w-full">
-                      <Info className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+                    <div className="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 flex gap-3 w-full">
+                      <Info className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                       <p>
                         <strong>New to DeFi?</strong> You need a Web3 wallet extension (like MetaMask) installed in your browser, or a mobile wallet app to connect to these markets.
                       </p>
                     </div>
 
-                    <button onClick={() => connect({ connector: mock({ accounts: ['0x71C7656EC7ab88b098defB751B7401B5f6d8976F'] }) })} className="mt-4 text-xs font-semibold text-slate-500 hover:text-blue-400 transition-colors hover:underline">
+                    <button onClick={() => connect({ connector: mock({ accounts: ['0x71C7656EC7ab88b098defB751B7401B5f6d8976F'] }) })} className="mt-4 text-xs font-semibold text-slate-400 hover:text-emerald-500 transition-colors hover:underline">
                       Simulate Wallet Connection
                     </button>
                   </div>
                 ) : activeTab === 'withdraw' ? (
-                  <button className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold py-4 rounded-xl shadow-sm transition-all active:scale-[0.98]">
+                  <button className="w-full bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 font-bold py-4 rounded-xl shadow-sm transition-all active:scale-[0.98]">
                     Withdraw {pool.symbol}
                   </button>
                 ) : zapState === 'success' ? (
-                  <div className="w-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 p-6 rounded-xl flex flex-col items-center gap-3">
-                    <CheckCircle2 className="w-10 h-10 text-emerald-400" />
+                  <div className="w-full bg-emerald-50 border border-emerald-200 text-emerald-700 p-6 rounded-xl flex flex-col items-center gap-3">
+                    <CheckCircle2 className="w-10 h-10 text-emerald-500" />
                     <div className="text-center">
-                      <p className="font-bold text-lg text-white">Deposit Successful!</p>
-                      <p className="text-sm opacity-80 mb-2 text-emerald-400/80">Your funds are now generating yield.</p>
+                      <p className="font-bold text-lg text-slate-900">Deposit Successful!</p>
+                      <p className="text-sm opacity-80 mb-2 text-emerald-700">Your funds are now generating yield.</p>
                       {txHash && (
                         <a 
                           href={pool.chain === 'Base' ? `https://basescan.org/tx/${txHash}` : `https://etherscan.io/tx/${txHash}`} 
                           target="_blank" 
                           rel="noopener noreferrer" 
-                          className="inline-flex items-center gap-1 text-xs font-semibold text-blue-400 hover:text-blue-300 hover:underline bg-blue-500/10 border border-blue-500/20 px-2 py-1 rounded mt-1"
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 hover:text-emerald-700 hover:underline bg-emerald-100/50 border border-emerald-200 px-2 py-1 rounded mt-1"
                         >
                           View Transaction <ExternalLink className="w-3 h-3" />
                         </a>
                       )}
                     </div>
-                    <button onClick={() => { setZapState('idle'); setAmount(''); setTxHash(''); setError(''); }} className="mt-3 text-sm font-semibold hover:underline text-emerald-400">New Deposit</button>
+                    <button onClick={() => { setZapState('idle'); setAmount(''); setTxHash(''); setError(''); }} className="mt-3 text-sm font-semibold hover:underline text-emerald-600">New Deposit</button>
                   </div>
                 ) : (
                   <div className="space-y-4">
                     {error && (
-                      <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl text-xs text-rose-400 flex gap-2 w-full">
+                      <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-600 flex gap-2 w-full">
                         <AlertTriangle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
                         <span>{error}</span>
                       </div>
                     )}
 
                     {(zapState === 'review' || zapState === 'signing') && routeData && (
-                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="bg-slate-900 border border-white/10 rounded-xl p-4 space-y-3">
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1"><Zap className="w-3 h-3 text-amber-400" /> Smart Route Found</h4>
+                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1"><Zap className="w-3 h-3 text-emerald-500" /> Smart Route Found</h4>
                         <div className="flex justify-between text-sm">
-                          <span className="text-slate-400">Network Fee (Est.)</span>
-                          <span className="font-medium text-white">${routeData.networkFee}</span>
+                          <span className="text-slate-500">Network Fee (Est.)</span>
+                          <span className="font-medium text-slate-900">${routeData.networkFee}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-slate-400">Max Slippage</span>
-                          <span className="font-medium text-white">{routeData.slippage}</span>
+                          <span className="text-slate-500">Max Slippage</span>
+                          <span className="font-medium text-slate-900">{routeData.slippage}</span>
                         </div>
-                        <div className="flex justify-between text-sm pt-2 border-t border-white/10">
-                          <span className="text-slate-400 font-medium">Developer Fee (0.5%)</span>
-                          <span className="font-mono font-bold text-blue-400">{routeData.developerFee} {payToken}</span>
+                        <div className="flex justify-between text-sm pt-2 border-t border-slate-200">
+                          <span className="text-slate-600 font-medium">Developer Fee (0.5%)</span>
+                          <span className="font-mono font-bold text-emerald-600">{routeData.developerFee} {payToken}</span>
                         </div>
                       </motion.div>
                     )}
@@ -465,7 +467,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
                     <button 
                       onClick={zapState === 'idle' ? handleCalculateRoute : handleConfirmZap} 
                       disabled={!amount || parseFloat(amount) <= 0 || zapState === 'calculating' || zapState === 'signing'}
-                      className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:from-slate-700 disabled:to-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(59,130,246,0.4)] disabled:shadow-none transition-all active:scale-[0.98] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] flex items-center justify-center gap-2 border border-white/10"
+                      className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 disabled:from-slate-200 disabled:to-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-md shadow-emerald-500/20 disabled:shadow-none transition-all active:scale-[0.98] hover:shadow-lg hover:shadow-emerald-500/30 flex items-center justify-center gap-2"
                     >
                       {zapState === 'calculating' ? <><RefreshCw className="w-5 h-5 animate-spin" /> Finding Best Route...</> :
                        zapState === 'signing' ? <><RefreshCw className="w-5 h-5 animate-spin" /> Broadcast Transaction...</> :
