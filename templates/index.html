@@ -1,111 +1,40 @@
-<!-- Hero Section -->
 <section class="hero">
     <div class="container">
-        <h1 style="font-size: 3.2rem; font-weight: 800; background: linear-gradient(135deg, #fff 40%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-            Earn 10x More Interest on Your Savings
-        </h1>
-        <p style="font-size: 1.2rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto 10px;">
-            Traditional banks pay you less than 0.5% interest. Decentralized Finance (DeFi) pays up to 15%. 
-            We scan secure digital vaults to find you the best interest rates automatically.
-        </p>
+        <h1 class="hero-header">Institutional Yield Markets</h1>
+        <p class="hero-subtitle">Real-time aggregation of multi-chain liquidity pools, stablecoin vaults, and liquid staking yields. Connect Web3 wallet to deploy capital.</p>
     </div>
 </section>
 
-<!-- Beginner Guide Section -->
-<section class="beginner-guide" style="padding-bottom: 40px;">
-    <div class="container">
-        <div class="glass-card" style="border: 1px solid var(--border-glow); background: linear-gradient(135deg, hsl(223, 47%, 10%) 0%, hsl(263, 85%, 8%) 100%);">
-            <h2 style="font-family: var(--font-heading); font-size: 1.6rem; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 10px;">
-                💡 New to DeFi yields? Start here.
-            </h2>
-            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px; max-width: 800px;">
-                Decentralized Finance (DeFi) allows you to act as your own bank. Here is a simple 60-second explanation of the numbers in the table below to help you get started safely.
-            </p>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-                <!-- Jargon 1 -->
-                <div style="background: rgba(11, 15, 26, 0.5); border: 1px solid var(--border-color); padding: 18px; border-radius: var(--radius-sm);">
-                    <h3 style="color: var(--accent); font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 8px;">
-                        1. What is APY? (Interest Rate)
-                    </h3>
-                    <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5;">
-                        <strong>Annual Percentage Yield.</strong> This is your yearly interest rate. If you deposit $1,000 in a pool with 10% APY, you will earn $100 in interest over a year.
-                    </p>
-                </div>
-                
-                <!-- Jargon 2 -->
-                <div style="background: rgba(11, 15, 26, 0.5); border: 1px solid var(--border-color); padding: 18px; border-radius: var(--radius-sm);">
-                    <h3 style="color: var(--success); font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 8px;">
-                        2. What is TVL? (Safety Score)
-                    </h3>
-                    <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5;">
-                        <strong>Total Value Locked.</strong> This is the total amount of money deposited by other savers in that vault. The higher this number (e.g. $100M+), the safer and more trusted the platform is.
-                    </p>
-                </div>
-                
-                <!-- Jargon 3 -->
-                <div style="background: rgba(11, 15, 26, 0.5); border: 1px solid var(--border-color); padding: 18px; border-radius: var(--radius-sm);">
-                    <h3 style="color: var(--warning); font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 8px;">
-                        3. What are Stablecoins? (Low Risk)
-                    </h3>
-                    <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5;">
-                        Cryptocurrencies like <strong>USDC</strong> or <strong>USDT</strong> are digital dollars. They are always worth exactly $1.00 USD. Staking stablecoins lets you earn high interest without worrying about price drops.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Simple Quick-Start Instructions -->
-            <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px;">
-                <div style="font-size: 0.9rem; color: var(--text-primary);">
-                    🚀 <strong>How to start:</strong> 1. Set up a secure wallet (like Phantom or MetaMask) &bull; 2. Buy USDC/USDT &bull; 3. Pick a pool below & deposit!
-                </div>
-                <button onclick="filterForStablecoins()" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, var(--accent) 0%, #00d2ff 100%); color: #0b0f1a; font-weight: 700; text-transform: uppercase;">
-                    Show Me Stablecoins Only (Digital Dollars)
-                </button>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Dashboard Directory Panel -->
 <section class="directory">
     <div class="container">
         
-        <!-- Premium Live Search and Filtering Bar -->
-        <div class="glass-card filter-bar">
-            <div class="search-input-wrapper">
-                <input type="text" id="searchInput" class="search-input" placeholder="Search by asset, protocol, or network (e.g. USDC, Aave, Solana)...">
-            </div>
-            <div>
-                <select id="chainSelect" class="filter-select">
-                    <option value="">All Networks</option>
-                    <option value="Ethereum">Ethereum</option>
-                    <option value="Solana">Solana</option>
-                    <option value="Arbitrum">Arbitrum</option>
-                    <option value="Optimism">Optimism</option>
-                </select>
-            </div>
-            <div>
-                <select id="riskSelect" class="filter-select">
-                    <option value="">All Risk Tiers</option>
-                    <option value="Low">Low Risk (< 6% APY)</option>
-                    <option value="Medium">Medium Risk (6% - 12% APY)</option>
-                    <option value="High">High Risk (> 12% APY)</option>
-                </select>
-            </div>
+        <div class="filter-bar">
+            <input type="text" id="searchInput" class="input-control input-search" placeholder="Search markets (e.g. USDC, Ethereum, Aave)...">
+            <select id="chainSelect" class="input-control">
+                <option value="">All Networks</option>
+                <option value="Ethereum">Ethereum</option>
+                <option value="Solana">Solana</option>
+                <option value="Arbitrum">Arbitrum</option>
+                <option value="Optimism">Optimism</option>
+            </select>
+            <select id="riskSelect" class="input-control">
+                <option value="">All Risk Profiles</option>
+                <option value="Low">Low Risk</option>
+                <option value="Medium">Medium Risk</option>
+                <option value="High">High Risk</option>
+            </select>
         </div>
 
-        <!-- Dynamic Static Table -->
         <div class="table-wrapper">
             <table id="yieldsTable">
                 <thead>
                     <tr>
-                        <th style="cursor: pointer;" onclick="sortTable(0)">Platform</th>
+                        <th style="cursor: pointer;" onclick="sortTable(0)">Protocol</th>
                         <th style="cursor: pointer;" onclick="sortTable(1)">Asset</th>
-                        <th style="cursor: pointer;" onclick="sortTable(2)">Blockchain</th>
-                        <th style="cursor: pointer;" onclick="sortTable(3, true)">APY</th>
+                        <th style="cursor: pointer;" onclick="sortTable(2)">Network</th>
+                        <th style="cursor: pointer;" onclick="sortTable(3, true)">Net APY</th>
                         <th style="cursor: pointer;" onclick="sortTable(4, true)">TVL (USD)</th>
-                        <th>Safety Tier</th>
+                        <th>Risk Tier</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -118,9 +47,7 @@
     </div>
 </section>
 
-<!-- Embedded Client-Side Interactive Engine -->
 <script>
-    // Live Search and Multi-Filtering Engine
     const searchInput = document.getElementById('searchInput');
     const chainSelect = document.getElementById('chainSelect');
     const riskSelect = document.getElementById('riskSelect');
@@ -150,20 +77,11 @@
         });
     }
 
-    function filterForStablecoins() {
-        // Clear chain and risk select, set search query to USD, and trigger filter
-        chainSelect.value = "";
-        riskSelect.value = "";
-        searchInput.value = "USD";
-        filterTable();
-    }
-
     searchInput.addEventListener('input', filterTable);
     chainSelect.addEventListener('change', filterTable);
     riskSelect.addEventListener('change', filterTable);
 
-    // Advanced Sorting Engine for APY and TVL
-    let sortDirections = [true, true, true, true, true]; // tracks ASC/DESC
+    let sortDirections = [true, true, true, true, true]; 
     
     function sortTable(colIndex, isNumeric = false) {
         const sortedDirection = sortDirections[colIndex];
@@ -174,17 +92,12 @@
             let valB = b.cells[colIndex].getAttribute('data-sort-value') || b.cells[colIndex].innerText || b.cells[colIndex].textContent;
             
             if (isNumeric) {
-                return sortedDirection 
-                    ? parseFloat(valA) - parseFloat(valB) 
-                    : parseFloat(valB) - parseFloat(valA);
+                return sortedDirection ? parseFloat(valA) - parseFloat(valB) : parseFloat(valB) - parseFloat(valA);
             } else {
-                return sortedDirection 
-                    ? valA.localeCompare(valB) 
-                    : valB.localeCompare(valA);
+                return sortedDirection ? valA.localeCompare(valB) : valB.localeCompare(valA);
             }
         });
         
-        // Re-append sorted rows to body
         sortedRows.forEach(row => tableBody.appendChild(row));
     }
 </script>

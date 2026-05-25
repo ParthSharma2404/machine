@@ -73,12 +73,23 @@ def process_and_filter_pools(raw_pools):
         # Standardize keys depending on API vs Fallback structure
         pool_id = p.get("pool")
         project = p.get("project")
-        symbol = p.get("symbol", "").upper()
+        symbol = p.get("symbol", "")
         chain = p.get("chain")
         apy = p.get("apy")
         tvl = p.get("tvlUsd")
         
-        if not all([pool_id, project, symbol, chain, apy is not None, tvl]):
+        # RIGID DATA VALIDATION (Financial Grade)
+        if not pool_id or not isinstance(pool_id, str): continue
+        if not project or not isinstance(project, str): continue
+        if not symbol or not isinstance(symbol, str): continue
+        if not chain or not isinstance(chain, str): continue
+        if apy is None or not isinstance(apy, (int, float)): continue
+        if tvl is None or not isinstance(tvl, (int, float)): continue
+        
+        symbol = symbol.upper()
+
+        # Reject anomalous or potentially exploitative APYs (e.g. > 1000%)
+        if apy < 0 or apy > 1000:
             continue
             
         # Keep only pools with reasonable TVL (at least $1M) to protect users from micro-cap rugpulls

@@ -32,12 +32,12 @@ def generate_table_rows(pools):
         row = f"""
         <tr data-project="{p['project']}" data-symbol="{p['symbol']}" data-chain="{p['chain']}" data-risk="{p['riskLevel']}">
             <td><strong>{p['project']}</strong></td>
-            <td data-sort-value="{p['symbol']}">{p['symbol']}</td>
+            <td class="primary-asset mono" data-sort-value="{p['symbol']}">{p['symbol']}</td>
             <td><span class="badge badge-chain">{p['chain']}</span></td>
-            <td class="badge-apy" data-sort-value="{p['apy']}">{p['apy']}%</td>
-            <td data-sort-value="{p['tvlUsd']}">${tvl_formatted}</td>
+            <td class="badge-apy mono" data-sort-value="{p['apy']}">{p['apy']}%</td>
+            <td class="mono" data-sort-value="{p['tvlUsd']}">${tvl_formatted}</td>
             <td><span class="badge badge-risk {risk_class}">{p['riskLevel']}</span></td>
-            <td><a href="/pools/{p['pool']}.html" class="btn btn-secondary btn-sm">View Pool</a></td>
+            <td><a href="/pools/{p['pool']}.html" class="btn btn-secondary btn-sm">Trade</a></td>
         </tr>
         """
         rows.append(row)

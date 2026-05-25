@@ -6,70 +6,70 @@
     <title>{{ title }} | YieldPulse</title>
     <meta name="description" content="{{ description }}">
     <link rel="stylesheet" href="/style.css">
+    <!-- Ethers.js for Web3 Integration -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.1/ethers.umd.min.js"></script>
 </head>
 <body>
-
-    <!-- Glassmorphic Header -->
     <header>
         <div class="container header-inner">
             <a href="/" class="logo">
-                YieldPulse<span>AGGREGATOR</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l3-9 6 18 3-9h6"/></svg>
+                Yield<span class="logo-pulse">Pulse</span>
             </a>
             <nav>
-                <a href="/">Dashboard</a>
-                <a href="/stablecoins/usdc.html">USDC Yields</a>
-                <a href="/stablecoins/usdt.html">USDT Yields</a>
-                <a href="/chains/ethereum.html">Ethereum Pools</a>
+                <a href="/">Markets</a>
+                <a href="/stablecoins/usdc.html">USDC</a>
+                <a href="/stablecoins/usdt.html">USDT</a>
+                <button id="connectWalletBtn" class="btn-connect">Connect Wallet</button>
             </nav>
         </div>
     </header>
 
-    <!-- Main Dynamic Content Injector -->
     <main>
         {{ content }}
     </main>
 
-    <!-- Semantic SEO Footer -->
     <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h4>YieldPulse</h4>
-                    <p style="margin-top: 10px; font-size: 0.85rem; line-height: 1.5;">
-                        YieldPulse is an automated, real-time index of the highest-yielding DeFi & CeFi investment opportunities. Track, compare, and filter assets securely.
-                    </p>
-                </div>
-                <div class="footer-col">
-                    <h4>Stablecoins</h4>
-                    <ul>
-                        <li><a href="/stablecoins/usdc.html">USDC Pools</a></li>
-                        <li><a href="/stablecoins/usdt.html">USDT Pools</a></li>
-                        <li><a href="/stablecoins/dai.html">DAI Pools</a></li>
-                        <li><a href="/stablecoins/usde.html">USDe Pools</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Networks</h4>
-                    <ul>
-                        <li><a href="/chains/ethereum.html">Ethereum (L1)</a></li>
-                        <li><a href="/chains/solana.html">Solana (L1)</a></li>
-                        <li><a href="/chains/arbitrum.html">Arbitrum (L2)</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Legal & Safety</h4>
-                    <ul>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Risk Disclaimers</a></li>
-                    </ul>
-                </div>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <p>&copy; 2026 YieldPulse Institutional. Real-time aggregated financial data.</p>
             </div>
-            <div style="border-top: 1px solid var(--border-color); padding-top: 20px; text-align: center; font-size: 0.8rem;">
-                <p>&copy; 2026 YieldPulse Aggregator. All data fetched or aggregated automatically from trusted liquidity sources. Past returns do not guarantee future yields.</p>
+            <div style="display: flex; gap: 16px;">
+                <a href="#" style="color: var(--text-muted); text-decoration: none;">Terms of Service</a>
+                <a href="#" style="color: var(--text-muted); text-decoration: none;">Privacy Policy</a>
+                <a href="#" style="color: var(--text-muted); text-decoration: none;">API Access</a>
             </div>
         </div>
     </footer>
 
+    <script>
+        // Institutional Web3 Connection Logic
+        const connectBtn = document.getElementById('connectWalletBtn');
+        let userAddress = null;
+
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    const provider = new ethers.BrowserProvider(window.ethereum);
+                    const accounts = await provider.send("eth_requestAccounts", []);
+                    userAddress = accounts[0];
+                    connectBtn.textContent = userAddress.slice(0, 6) + "..." + userAddress.slice(-4);
+                    connectBtn.style.background = "var(--primary-glow)";
+                    connectBtn.style.borderColor = "var(--primary)";
+                    
+                    // Dispatch custom event for page-specific transaction logic
+                    window.dispatchEvent(new CustomEvent('walletConnected', { detail: { address: userAddress, provider } }));
+                } catch (error) {
+                    console.error("Wallet connection denied", error);
+                }
+            } else {
+                alert("No Web3 wallet detected. Please install MetaMask or a compatible browser extension to interact with smart contracts.");
+            }
+        }
+
+        connectBtn.addEventListener('click', () => {
+            if (!userAddress) connectWallet();
+        });
+    </script>
 </body>
 </html>
