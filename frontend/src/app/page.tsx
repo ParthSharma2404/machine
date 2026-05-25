@@ -226,9 +226,9 @@ export default function Home() {
                         <td className="px-6 py-6">
                           <div className="flex items-center gap-3">
                             <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                              <div className={`h-full rounded-full ${pool.yieldScore >= 80 ? 'bg-emerald-500' : pool.yieldScore >= 50 ? 'bg-amber-500' : 'bg-rose-500'}`} style={{ width: `${pool.yieldScore}%` }} />
+                              <div className={`h-full rounded-full ${pool.yieldScore >= 90 ? 'bg-emerald-500' : pool.yieldScore >= 80 ? 'bg-teal-500' : pool.yieldScore >= 70 ? 'bg-amber-500' : pool.yieldScore >= 60 ? 'bg-orange-500' : 'bg-rose-500'}`} style={{ width: `${pool.yieldScore}%` }} />
                             </div>
-                            <span className={`text-xs font-bold ${pool.yieldScore >= 80 ? 'text-emerald-600' : pool.yieldScore >= 50 ? 'text-amber-600' : 'text-rose-600'}`}>{pool.yieldScore}</span>
+                            <span className={`text-xs font-bold ${pool.yieldScore >= 90 ? 'text-emerald-600' : pool.yieldScore >= 80 ? 'text-teal-600' : pool.yieldScore >= 70 ? 'text-amber-600' : pool.yieldScore >= 60 ? 'text-orange-600' : 'text-rose-600'}`}>{pool.yieldScore}</span>
                           </div>
                         </td>
                         <td className="px-6 py-6 text-right">
