@@ -29,8 +29,69 @@
         <!-- Hero Section -->
 <section class="hero">
     <div class="container">
-        <h1>Top Solana Yield Pools & Staking</h1>
-        <p>Compare annual percentage returns (APY) and liquidity pools running on the high-performance Solana network. Filtered, monitored, and analyzed for risk.</p>
+        <h1 style="font-size: 3.2rem; font-weight: 800; background: linear-gradient(135deg, #fff 40%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            Earn 10x More Interest on Your Savings
+        </h1>
+        <p style="font-size: 1.2rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto 10px;">
+            Traditional banks pay you less than 0.5% interest. Decentralized Finance (DeFi) pays up to 15%. 
+            We scan secure digital vaults to find you the best interest rates automatically.
+        </p>
+    </div>
+</section>
+
+<!-- Beginner Guide Section -->
+<section class="beginner-guide" style="padding-bottom: 40px;">
+    <div class="container">
+        <div class="glass-card" style="border: 1px solid var(--border-glow); background: linear-gradient(135deg, hsl(223, 47%, 10%) 0%, hsl(263, 85%, 8%) 100%);">
+            <h2 style="font-family: var(--font-heading); font-size: 1.6rem; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 10px;">
+                💡 New to DeFi yields? Start here.
+            </h2>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px; max-width: 800px;">
+                Decentralized Finance (DeFi) allows you to act as your own bank. Here is a simple 60-second explanation of the numbers in the table below to help you get started safely.
+            </p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <!-- Jargon 1 -->
+                <div style="background: rgba(11, 15, 26, 0.5); border: 1px solid var(--border-color); padding: 18px; border-radius: var(--radius-sm);">
+                    <h3 style="color: var(--accent); font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 8px;">
+                        1. What is APY? (Interest Rate)
+                    </h3>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5;">
+                        <strong>Annual Percentage Yield.</strong> This is your yearly interest rate. If you deposit $1,000 in a pool with 10% APY, you will earn $100 in interest over a year.
+                    </p>
+                </div>
+                
+                <!-- Jargon 2 -->
+                <div style="background: rgba(11, 15, 26, 0.5); border: 1px solid var(--border-color); padding: 18px; border-radius: var(--radius-sm);">
+                    <h3 style="color: var(--success); font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 8px;">
+                        2. What is TVL? (Safety Score)
+                    </h3>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5;">
+                        <strong>Total Value Locked.</strong> This is the total amount of money deposited by other savers in that vault. The higher this number (e.g. $100M+), the safer and more trusted the platform is.
+                    </p>
+                </div>
+                
+                <!-- Jargon 3 -->
+                <div style="background: rgba(11, 15, 26, 0.5); border: 1px solid var(--border-color); padding: 18px; border-radius: var(--radius-sm);">
+                    <h3 style="color: var(--warning); font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 8px;">
+                        3. What are Stablecoins? (Low Risk)
+                    </h3>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5;">
+                        Cryptocurrencies like <strong>USDC</strong> or <strong>USDT</strong> are digital dollars. They are always worth exactly $1.00 USD. Staking stablecoins lets you earn high interest without worrying about price drops.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Simple Quick-Start Instructions -->
+            <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px;">
+                <div style="font-size: 0.9rem; color: var(--text-primary);">
+                    🚀 <strong>How to start:</strong> 1. Set up a secure wallet (like Phantom or MetaMask) &bull; 2. Buy USDC/USDT &bull; 3. Pick a pool below & deposit!
+                </div>
+                <button onclick="filterForStablecoins()" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, var(--accent) 0%, #00d2ff 100%); color: #0b0f1a; font-weight: 700; text-transform: uppercase;">
+                    Show Me Stablecoins Only (Digital Dollars)
+                </button>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -169,6 +230,14 @@
                 row.style.display = 'none';
             }
         });
+    }
+
+    function filterForStablecoins() {
+        // Clear chain and risk select, set search query to USD, and trigger filter
+        chainSelect.value = "";
+        riskSelect.value = "";
+        searchInput.value = "USD";
+        filterTable();
     }
 
     searchInput.addEventListener('input', filterTable);
