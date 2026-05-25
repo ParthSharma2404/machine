@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount, useSignMessage, useConnect } from 'wagmi';
+import { useAccount, useSignMessage, useConnect, useSendTransaction } from 'wagmi';
 import { mock } from 'wagmi/connectors';
 import { ArrowLeft, ShieldCheck, Activity, LineChart, LockOpen, TrendingUp, Clock, Percent, DollarSign, AlertTriangle, Info, ArrowUpRight, Layers, ExternalLink, RefreshCw, CheckCircle2, Zap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -67,35 +67,179 @@ function InteractiveChart({ apy }: { apy: number }) {
   );
 }
 
+const EVM_CHAINS: Record<string, { id: number; native: string; usdc: string; name: string }> = {
+  'Base': {
+    id: 8453,
+    native: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    usdc: '0x833589fCD6eDb6E08f4c7C32D4f71b54bda02913',
+    name: 'Base'
+  },
+  'Arbitrum': {
+    id: 42161,
+    native: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    usdc: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
+    name: 'Arbitrum One'
+  },
+  'Optimism': {
+    id: 10,
+    native: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    usdc: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
+    name: 'OP Mainnet'
+  },
+  'Ethereum': {
+    id: 1,
+    native: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0CE3606eB48',
+    name: 'Ethereum'
+  },
+  'Polygon': {
+    id: 137,
+    native: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    usdc: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359',
+    name: 'Polygon'
+  }
+};
+
+function getTargetTokenAddress(chainName: string, symbol: string): string {
+  const chainInfo = EVM_CHAINS[chainName];
+  if (!chainInfo) return '';
+  const sym = symbol.toUpperCase();
+  if (sym.includes('USDC') || sym.includes('USDT') || sym.includes('DAI')) {
+    return chainInfo.usdc;
+  }
+  return chainInfo.native;
+}
+
+const fetchQuote = async (
+  fromChainId: number,
+  toChainId: number,
+  fromTokenAddress: string,
+  toTokenAddress: string,
+  amount: string,
+  userAddress: string
+) => {
+  const isUsdc = fromTokenAddress.toLowerCase() === '0x833589fCD6eDb6E08f4c7C32D4f71b54bda02913'.toLowerCase() || 
+                 fromTokenAddress.toLowerCase() === '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'.toLowerCase() ||
+                 fromTokenAddress.toLowerCase() === '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85'.toLowerCase() ||
+                 fromTokenAddress.toLowerCase() === '0xA0b86991c6218b36c1d19D4a2e9Eb0CE3606eB48'.toLowerCase() ||
+                 fromTokenAddress.toLowerCase() === '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'.toLowerCase();
+  
+  const decimals = isUsdc ? 6 : 18;
+  const parsedAmount = (parseFloat(amount) * Math.pow(10, decimals)).toFixed(0);
+
+  const url = `https://li.quest/v1/quote?fromChain=${fromChainId}&toChain=${toChainId}&fromToken=${fromTokenAddress}&toToken=${toTokenAddress}&fromAmount=${parsedAmount}&fromAddress=${userAddress}&fee=0.0025&feeReceiver=0x809dE57cddA3F5CAFce3F89DA9ad9269E1fFfA52`;
+  
+  const response = await fetch(url);
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to fetch quote from Li.Fi');
+  }
+  return response.json();
+};
+
 export default function PoolDetailClient({ pool }: { pool: any }) {
   const router = useRouter();
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const { signMessageAsync } = useSignMessage();
+  const { sendTransactionAsync } = useSendTransaction();
   const { connect } = useConnect();
   const [amount, setAmount] = useState('');
+  const [payToken, setPayToken] = useState<'ETH' | 'USDC'>('ETH');
+  const [txHash, setTxHash] = useState('');
+  const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw'>('deposit');
   const [zapState, setZapState] = useState<'idle' | 'calculating' | 'review' | 'signing' | 'success'>('idle');
   const [routeData, setRouteData] = useState<any>(null);
 
-  const handleCalculateRoute = () => {
+  const handleCalculateRoute = async () => {
+    if (!amount || parseFloat(amount) <= 0) return;
     setZapState('calculating');
-    setTimeout(() => {
-      const devFee = (parseFloat(amount) * 0.0025).toFixed(2);
+    setError('');
+    
+    const chainInfo = EVM_CHAINS[pool.chain];
+    if (!chainInfo) {
+      setError(`Chain ${pool.chain} is not supported for real transactions yet.`);
+      setZapState('idle');
+      return;
+    }
+
+    const isSimulated = address === '0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
+    if (isSimulated) {
+      setTimeout(() => {
+        const devFee = (parseFloat(amount) * 0.0025).toFixed(4);
+        setRouteData({
+          networkFee: '0.05',
+          slippage: '0.5%',
+          developerFee: devFee,
+          transactionRequest: null
+        });
+        setZapState('review');
+      }, 1200);
+      return;
+    }
+
+    try {
+      const fromTokenAddress = payToken === 'USDC' ? chainInfo.usdc : chainInfo.native;
+      const toTokenAddress = getTargetTokenAddress(pool.chain, pool.symbol);
+      const userAddress = address || '0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
+      
+      const quote = await fetchQuote(
+        chainInfo.id,
+        chainInfo.id,
+        fromTokenAddress,
+        toTokenAddress,
+        amount,
+        userAddress
+      );
+
+      const networkFeeUsd = quote.transactionRequest?.gasLimit && quote.transactionRequest?.gasPrice 
+        ? (parseFloat(quote.transactionRequest.gasLimit) * parseFloat(quote.transactionRequest.gasPrice) / 1e18 * 3000).toFixed(2)
+        : '0.10';
+
       setRouteData({
-        networkFee: (Math.random() * 2 + 0.5).toFixed(2),
-        slippage: '0.1%',
-        developerFee: devFee
+        networkFee: networkFeeUsd,
+        slippage: '0.5%',
+        developerFee: (parseFloat(amount) * 0.0025).toFixed(4),
+        transactionRequest: quote.transactionRequest,
+        rawQuote: quote
       });
+      
       setZapState('review');
-    }, 1500);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || 'Route calculation failed. Check wallet network.');
+      setZapState('idle');
+    }
   };
 
   const handleConfirmZap = async () => {
     try {
       setZapState('signing');
-      await signMessageAsync({ message: `YieldPulse Execution:\n\nApprove routing of ${amount} ${pool.symbol} into ${pool.project} ${pool.chain}.\nDeveloper Fee (0.25%): $${routeData.developerFee}\n\nThis is a simulated signature for the YieldPulse portfolio engine.` });
+      setError('');
+      
+      const isSimulated = address === '0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
+      if (isSimulated) {
+        await signMessageAsync({ message: `YieldPulse Simulation:\n\nApprove mock routing of ${amount} ${payToken} into ${pool.project} ${pool.chain}.\nDeveloper Fee (0.25%): ${routeData.developerFee} ${payToken}` });
+        setZapState('success');
+        return;
+      }
+
+      if (!routeData?.transactionRequest) {
+        throw new Error('No valid transaction route payload found.');
+      }
+
+      const tx = routeData.transactionRequest;
+      const hash = await sendTransactionAsync({
+        to: tx.to as `0x${string}`,
+        data: tx.data as `0x${string}`,
+        value: tx.value ? BigInt(tx.value) : undefined,
+      });
+
+      setTxHash(hash);
       setZapState('success');
-    } catch (err) {
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || 'Transaction rejected or failed.');
       setZapState('review');
     }
   };
@@ -188,19 +332,36 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
             <div className="gradient-border shadow-sm hover:shadow-lg transition-shadow sticky top-24 hover:!transform-none">
               <div className="p-6 pt-8">
                 {/* Tabs */}
-                <div className="flex gap-1 mb-6 bg-slate-100 rounded-xl p-1">
+                <div className="flex bg-slate-100 rounded-xl p-1 mb-6">
                   {(['deposit', 'withdraw'] as const).map(tab => (
-                    <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === tab ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}>{tab === 'deposit' ? 'Deposit' : 'Withdraw'}</button>
+                    <button key={tab} onClick={() => { setActiveTab(tab); setZapState('idle'); setAmount(''); setError(''); }} className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === tab ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}>{tab === 'deposit' ? 'Deposit' : 'Withdraw'}</button>
                   ))}
                 </div>
+
+                {activeTab === 'deposit' && (
+                  <div className="mb-6">
+                    <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Pay With</span>
+                    <div className="flex gap-2">
+                      {(['ETH', 'USDC'] as const).map(token => (
+                        <button 
+                          key={token} 
+                          onClick={() => { setPayToken(token); setAmount(''); setZapState('idle'); setError(''); }} 
+                          className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all border ${payToken === token ? 'bg-primary border-primary text-white' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`}
+                        >
+                          {token}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div className="mb-6">
                   <div className="flex justify-between text-sm mb-2">
                     <span className="text-slate-400 font-medium">Amount</span>
-                    <span className="text-slate-400 text-xs">Balance: <span className="font-mono font-semibold text-slate-600">{isConnected ? '10,000.00' : '0.00'} {pool.symbol}</span></span>
+                    <span className="text-slate-400 text-xs">Balance: <span className="font-mono font-semibold text-slate-600">{isConnected ? '10,000.00' : '0.00'} {activeTab === 'deposit' ? payToken : pool.symbol}</span></span>
                   </div>
                   <div className="relative">
-                    <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 pl-4 pr-20 text-lg font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
+                    <input type="number" value={amount} onChange={(e) => { setAmount(e.target.value); setZapState('idle'); setError(''); }} placeholder="0.00" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 pl-4 pr-20 text-lg font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
                     <button onClick={() => setAmount('10000')} className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-primary bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors">MAX</button>
                   </div>
                 </div>
@@ -248,12 +409,29 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
                     <CheckCircle2 className="w-10 h-10 text-emerald-500" />
                     <div className="text-center">
                       <p className="font-bold text-lg">Deposit Successful!</p>
-                      <p className="text-sm opacity-80">Your funds are now generating yield.</p>
+                      <p className="text-sm opacity-80 mb-2">Your funds are now generating yield.</p>
+                      {txHash && (
+                        <a 
+                          href={pool.chain === 'Base' ? `https://basescan.org/tx/${txHash}` : `https://etherscan.io/tx/${txHash}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline bg-blue-50 px-2 py-1 rounded"
+                        >
+                          View Transaction <ExternalLink className="w-3 h-3" />
+                        </a>
+                      )}
                     </div>
-                    <button onClick={() => { setZapState('idle'); setAmount(''); }} className="mt-2 text-sm font-semibold hover:underline">New Deposit</button>
+                    <button onClick={() => { setZapState('idle'); setAmount(''); setTxHash(''); setError(''); }} className="mt-2 text-sm font-semibold hover:underline">New Deposit</button>
                   </div>
                 ) : (
                   <div className="space-y-4">
+                    {error && (
+                      <div className="p-4 bg-rose-50 border border-rose-100 rounded-xl text-xs text-rose-700/90 flex gap-2 w-full">
+                        <AlertTriangle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                        <span>{error}</span>
+                      </div>
+                    )}
+
                     {(zapState === 'review' || zapState === 'signing') && routeData && (
                       <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
                         <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1"><Zap className="w-3 h-3 text-amber-500" /> Smart Route Found</h4>
@@ -266,8 +444,8 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
                           <span className="font-medium text-slate-700">{routeData.slippage}</span>
                         </div>
                         <div className="flex justify-between text-sm pt-2 border-t border-slate-200">
-                          <span className="text-slate-500 font-medium">YieldPulse Fee (0.25%)</span>
-                          <span className="font-mono font-bold text-primary">${routeData.developerFee}</span>
+                          <span className="text-slate-500 font-medium">Developer Fee (0.25%)</span>
+                          <span className="font-mono font-bold text-primary">{routeData.developerFee} {payToken}</span>
                         </div>
                       </motion.div>
                     )}
@@ -278,9 +456,9 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
                       className="w-full bg-primary hover:bg-primary-hover disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98] hover:shadow-xl flex items-center justify-center gap-2"
                     >
                       {zapState === 'calculating' ? <><RefreshCw className="w-5 h-5 animate-spin" /> Finding Best Route...</> :
-                       zapState === 'signing' ? <><RefreshCw className="w-5 h-5 animate-spin" /> Check Wallet...</> :
+                       zapState === 'signing' ? <><RefreshCw className="w-5 h-5 animate-spin" /> Broadcast Transaction...</> :
                        zapState === 'review' ? 'Confirm Zap in Wallet' :
-                       `Deposit ${pool.symbol}`}
+                       `Deposit ${payToken}`}
                     </button>
                   </div>
                 )}
