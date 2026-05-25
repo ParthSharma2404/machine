@@ -42,13 +42,13 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-border px-6 py-3 shadow-sm">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-border px-4 sm:px-6 py-3 shadow-sm">
+        <div className="max-w-7xl mx-auto flex justify-between items-center gap-2">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center shadow-[0_2px_10px_rgba(16,185,129,0.3)]">
+            <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center shrink-0 shadow-[0_2px_10px_rgba(16,185,129,0.3)]">
               <Activity className="text-white w-4 h-4" />
             </div>
-            <span className="font-bold text-xl tracking-tight text-slate-900">
+            <span className="font-bold text-lg sm:text-xl tracking-tight text-slate-900 truncate">
               Yeild<span className="text-emerald-600">Pulse</span>
             </span>
           </div>
@@ -57,7 +57,9 @@ export default function Home() {
             <a href="#features" className="hover:text-emerald-600 transition-colors">Features</a>
             <a href="#how-it-works" className="hover:text-emerald-600 transition-colors">How It Works</a>
           </nav>
-          <ConnectButton showBalance={false} chainStatus="icon" />
+          <div className="shrink-0">
+            <ConnectButton showBalance={false} chainStatus="icon" />
+          </div>
         </div>
       </header>
 
@@ -185,7 +187,7 @@ export default function Home() {
         {/* Data Table Section */}
         <section id="markets" className="py-24 px-6 bg-white relative border-t border-slate-100">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center mb-8 gap-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
               <div>
                 <p className="text-sm font-semibold text-emerald-600 uppercase tracking-wider mb-1">Live Data</p>
                 <h2 className="text-3xl font-bold text-slate-900">Yield Markets</h2>

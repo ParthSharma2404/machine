@@ -265,16 +265,18 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
     <div className="min-h-screen bg-grid-green text-foreground relative">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white pointer-events-none" />
       
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-6 py-3 shadow-sm relative">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <button onClick={() => router.back()} className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100 flex items-center justify-center transition-colors"><ArrowLeft className="w-4 h-4 text-slate-600" /></button>
-            <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push('/')}>
-              <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center shadow-[0_2px_10px_rgba(16,185,129,0.3)]"><Activity className="text-white w-4 h-4" /></div>
-              <span className="font-bold text-xl tracking-tight text-slate-900">Yeild<span className="text-emerald-600">Pulse</span></span>
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 py-3 shadow-sm relative">
+        <div className="max-w-7xl mx-auto flex justify-between items-center gap-2">
+          <div className="flex items-center gap-2 sm:gap-4 shrink overflow-hidden">
+            <button onClick={() => router.back()} className="shrink-0 w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100 flex items-center justify-center transition-colors"><ArrowLeft className="w-4 h-4 text-slate-600" /></button>
+            <div className="flex items-center gap-2 cursor-pointer shrink overflow-hidden" onClick={() => router.push('/')}>
+              <div className="shrink-0 w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center shadow-[0_2px_10px_rgba(16,185,129,0.3)]"><Activity className="text-white w-4 h-4" /></div>
+              <span className="font-bold text-lg sm:text-xl tracking-tight text-slate-900 truncate">Yeild<span className="text-emerald-600">Pulse</span></span>
             </div>
           </div>
-          <ConnectButton showBalance={false} chainStatus="icon" />
+          <div className="shrink-0">
+            <ConnectButton showBalance={false} chainStatus="icon" />
+          </div>
         </div>
       </header>
 
