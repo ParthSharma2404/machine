@@ -211,7 +211,7 @@ export default function Home() {
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {filteredPools.map((pool) => (
-                      <tr key={pool.pool} onClick={() => { setLoadingPool(pool.pool); router.push(`/pools/${pool.pool}/`); }} className={`group transition-all cursor-pointer ${loadingPool === pool.pool ? 'bg-blue-50/80 pointer-events-none' : 'hover:bg-blue-50/40'}`}>
+                      <tr key={pool.pool} onMouseEnter={() => router.prefetch(`/pools/${pool.pool}/`)} onClick={() => { setLoadingPool(pool.pool); setTimeout(() => router.push(`/pools/${pool.pool}/`), 10); }} className={`group transition-all cursor-pointer ${loadingPool === pool.pool ? 'bg-blue-50/80 pointer-events-none' : 'hover:bg-blue-50/40'}`}>
                         <td className="px-6 py-5">
                           <div className="flex items-center gap-3">
                             <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 group-hover:bg-primary group-hover:text-white transition-colors">{pool.project.substring(0, 2).toUpperCase()}</div>
