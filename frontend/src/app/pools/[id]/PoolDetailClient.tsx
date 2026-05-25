@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount, useSignMessage, useConnect, useSendTransaction } from 'wagmi';
+import { useAccount, useSignMessage, useConnect, useSendTransaction, useBalance } from 'wagmi';
 import { mock } from 'wagmi/connectors';
 import { ArrowLeft, ShieldCheck, Activity, LineChart, LockOpen, TrendingUp, Clock, Percent, DollarSign, AlertTriangle, Info, ArrowUpRight, Layers, ExternalLink, RefreshCw, CheckCircle2, Zap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -150,6 +150,17 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
   const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw'>('deposit');
   const [zapState, setZapState] = useState<'idle' | 'calculating' | 'review' | 'signing' | 'success'>('idle');
   const [routeData, setRouteData] = useState<any>(null);
+
+  const chainInfoForBalance = EVM_CHAINS[pool.chain];
+  const { data: balanceData } = useBalance({
+    address: address,
+    token: payToken === 'USDC' && chainInfoForBalance ? (chainInfoForBalance.usdc as `0x${string}`) : undefined,
+    chainId: chainInfoForBalance?.id,
+  });
+
+  const displayBalance = balanceData 
+    ? parseFloat(balanceData.formatted).toLocaleString(undefined, { maximumFractionDigits: 4 })
+    : '0.00';
 
   const handleCalculateRoute = async () => {
     if (!amount || parseFloat(amount) <= 0) return;
@@ -358,7 +369,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
                 <div className="mb-6">
                   <div className="flex justify-between text-sm mb-2">
                     <span className="text-slate-400 font-medium">Amount</span>
-                    <span className="text-slate-400 text-xs">Balance: <span className="font-mono font-semibold text-slate-600">{isConnected ? '10,000.00' : '0.00'} {activeTab === 'deposit' ? payToken : pool.symbol}</span></span>
+                    <span className="text-slate-400 text-xs">Balance: <span className="font-mono font-semibold text-slate-600">{isConnected ? displayBalance : '0.00'} {activeTab === 'deposit' ? payToken : pool.symbol}</span></span>
                   </div>
                   <div className="relative">
                     <input type="number" value={amount} onChange={(e) => { setAmount(e.target.value); setZapState('idle'); setError(''); }} placeholder="0.00" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-4 pl-4 pr-20 text-lg font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
