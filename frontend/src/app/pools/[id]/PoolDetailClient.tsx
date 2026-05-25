@@ -250,7 +250,8 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
       setZapState('success');
     } catch (err: any) {
       console.error(err);
-      setError(err.message || 'Transaction rejected or failed.');
+      const errorMessage = err.shortMessage || (err.message && err.message.includes('rejected') ? 'Transaction cancelled by user.' : 'Transaction failed.');
+      setError(errorMessage);
       setZapState('review');
     }
   };
