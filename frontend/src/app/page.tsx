@@ -4,9 +4,11 @@ import React, { useState } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { motion } from 'framer-motion';
 import { Search, Shield, Zap, Activity, ArrowRight, ShieldCheck, LockOpen, ArrowDownToLine, RefreshCw, HandCoins, BarChart3, Layers } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import poolsData from '../data/pools.json'; 
 
 export default function Home() {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   
   const filteredPools = poolsData.filter(pool => 
@@ -174,6 +176,7 @@ export default function Home() {
                   {filteredPools.map((pool, i) => (
                     <tr 
                       key={pool.pool}
+                      onClick={() => router.push(`/pools/${pool.pool}`)}
                       className="group hover:bg-slate-50 transition-colors cursor-pointer"
                     >
                       <td className="px-6 py-4">
