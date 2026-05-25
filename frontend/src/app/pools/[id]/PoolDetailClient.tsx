@@ -128,7 +128,7 @@ const fetchQuote = async (
   const decimals = isUsdc ? 6 : 18;
   const parsedAmount = (parseFloat(amount) * Math.pow(10, decimals)).toFixed(0);
 
-  const url = `https://li.quest/v1/quote?fromChain=${fromChainId}&toChain=${toChainId}&fromToken=${fromTokenAddress.toLowerCase()}&toToken=${toTokenAddress.toLowerCase()}&fromAmount=${parsedAmount}&fromAddress=${userAddress}`;
+  const url = `https://li.quest/v1/quote?fromChain=${fromChainId}&toChain=${toChainId}&fromToken=${fromTokenAddress.toLowerCase()}&toToken=${toTokenAddress.toLowerCase()}&fromAmount=${parsedAmount}&fromAddress=${userAddress}&fee=0.005&feeReceiver=0x809dE57cddA3F5CAFce3F89DA9ad9269E1fFfA52&integrator=yeildpulse`;
   
   const response = await fetch(url);
   if (!response.ok) {
