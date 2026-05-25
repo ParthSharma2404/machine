@@ -22,7 +22,7 @@ import {
 
 const config = getDefaultConfig({
   appName: 'YieldPulse Institutional',
-  projectId: 'c08e50b5ba53ef1baee1032dfbc4dd64', // Public demo projectId for RainbowKit docs
+  projectId: 'd38ea689bc7787e2085dce4eb8fe075d', // User's dedicated WalletConnect ID
   chains: [mainnet, polygon, optimism, arbitrum, base],
   ssr: false, 
 });
