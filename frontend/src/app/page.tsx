@@ -205,13 +205,13 @@ export default function Home() {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-slate-100 bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
-                      <th className="px-6 py-5 font-semibold">Protocol</th>
-                      <th className="px-6 py-5 font-semibold">Asset</th>
-                      <th className="px-6 py-5 font-semibold">Network</th>
-                      <th className="px-6 py-5 font-semibold">Net APY</th>
-                      <th className="px-6 py-5 font-semibold">TVL</th>
-                      <th className="px-6 py-5 font-semibold">YP Score</th>
-                      <th className="px-6 py-5 font-semibold text-right">Action</th>
+                      <th className="px-6 py-5 font-semibold w-[25%]">Protocol</th>
+                      <th className="px-6 py-5 font-semibold w-[20%]">Asset</th>
+                      <th className="px-6 py-5 font-semibold w-[15%]">Network</th>
+                      <th className="px-6 py-5 font-semibold w-[10%] whitespace-nowrap">Net APY</th>
+                      <th className="px-6 py-5 font-semibold w-[10%]">TVL</th>
+                      <th className="px-6 py-5 font-semibold w-[15%] whitespace-nowrap">YP Score</th>
+                      <th className="px-6 py-5 font-semibold text-right whitespace-nowrap w-[5%]">Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -224,7 +224,7 @@ export default function Home() {
                           </div>
                         </td>
                         <td className="px-6 py-6"><span className="font-mono text-sm font-medium text-slate-600 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg">{pool.symbol}</span></td>
-                        <td className="px-6 py-6"><span className="text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">{pool.chain}</span></td>
+                        <td className="px-6 py-6"><span className="text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 whitespace-nowrap">{pool.chain}</span></td>
                         <td className="px-6 py-6"><span className="font-mono text-emerald-600 font-bold text-lg">{pool.apy.toFixed(2)}%</span></td>
                         <td className="px-6 py-6 font-mono text-sm text-slate-500">${(pool.tvlUsd / 1e6).toFixed(1)}M</td>
                         <td className="px-6 py-6">
