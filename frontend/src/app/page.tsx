@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { motion } from 'framer-motion';
-import { Search, Shield, Zap, Activity, ArrowRight } from 'lucide-react';
-import poolsData from '../data/pools.json';
+import { Search, Shield, Zap, Activity, ArrowRight, ShieldCheck, LockOpen, ArrowDownToLine, RefreshCw, HandCoins, BarChart3, Layers } from 'lucide-react';
+import poolsData from '../data/pools.json'; 
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -29,18 +29,19 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <main className="flex-grow flex flex-col items-center px-6 pt-24 pb-20">
+      <main className="flex-grow flex flex-col items-center px-6 pt-16 pb-20">
+        
+        {/* Hero Section */}
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="text-center max-w-4xl mb-20"
+          transition={{ duration: 0.4 }}
+          className="text-center max-w-4xl mb-24 mt-8"
         >
           <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.1, duration: 0.3 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-8 border border-primary/20 backdrop-blur-sm"
           >
             <Shield className="w-4 h-4" /> Institutional Grade Security
@@ -53,11 +54,89 @@ export default function Home() {
           </p>
         </motion.div>
 
+        {/* Why YieldPulse Section */}
+        <div className="w-full max-w-7xl mb-28">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-white mb-4">The YieldPulse Advantage</h2>
+            <p className="text-text-secondary max-w-2xl mx-auto">Why sophisticated investors choose our platform to deploy their capital.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-card p-8 relative overflow-hidden group">
+               <div className="absolute top-0 left-0 w-1 h-full bg-blue-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+               <BarChart3 className="w-10 h-10 text-blue-500 mb-6" />
+               <h3 className="text-xl font-bold text-white mb-3">Highest Market Yields</h3>
+               <p className="text-text-secondary text-sm leading-relaxed">Our aggregator instantly scans Aave, Curve, Pendle, and dozens of other protocols to find you the absolute highest returning pools in DeFi.</p>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="glass-card p-8 relative overflow-hidden group">
+               <div className="absolute top-0 left-0 w-1 h-full bg-primary opacity-50 group-hover:opacity-100 transition-opacity"></div>
+               <ShieldCheck className="w-10 h-10 text-primary mb-6" />
+               <h3 className="text-xl font-bold text-white mb-3">Audited & Secure</h3>
+               <p className="text-text-secondary text-sm leading-relaxed">We only list pools that have undergone rigorous smart contract audits by top-tier security firms like OpenZeppelin and Trail of Bits.</p>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="glass-card p-8 relative overflow-hidden group">
+               <div className="absolute top-0 left-0 w-1 h-full bg-purple-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+               <LockOpen className="w-10 h-10 text-purple-500 mb-6" />
+               <h3 className="text-xl font-bold text-white mb-3">Zero Lock-ups</h3>
+               <p className="text-text-secondary text-sm leading-relaxed">Your capital remains highly liquid. Withdraw your initial deposit and your accumulated interest at any time with absolutely no lock-up periods.</p>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Graphical How It Works */}
+        <div className="w-full max-w-7xl mb-32 relative">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-white mb-4">How Your Money Works</h2>
+            <p className="text-text-secondary max-w-2xl mx-auto">A fully automated, non-custodial process. You always maintain full control of your assets.</p>
+          </div>
+          
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0 relative z-10">
+            {/* Step 1 */}
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="flex-1 w-full flex flex-col items-center text-center px-4">
+              <div className="w-20 h-20 rounded-2xl bg-card border border-border flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.15)] mb-6 relative">
+                 <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-blue-500 text-white font-bold flex items-center justify-center text-sm border-4 border-background">1</div>
+                 <ArrowDownToLine className="w-8 h-8 text-blue-500" />
+              </div>
+              <h4 className="text-lg font-bold text-white mb-2">Deposit Assets</h4>
+              <p className="text-sm text-text-secondary">Connect your Web3 wallet and deposit stablecoins or crypto into our secure smart vaults.</p>
+            </motion.div>
+
+            {/* Connector */}
+            <div className="hidden md:block flex-none w-16 h-[2px] bg-gradient-to-r from-blue-500/50 to-primary/50 relative -mt-20">
+               <ArrowRight className="absolute -right-2 -top-2 w-4 h-4 text-primary" />
+            </div>
+
+            {/* Step 2 */}
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="flex-1 w-full flex flex-col items-center text-center px-4">
+              <div className="w-20 h-20 rounded-2xl bg-card border border-border flex items-center justify-center shadow-[0_0_30px_rgba(0,229,153,0.15)] mb-6 relative">
+                 <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-primary text-background font-bold flex items-center justify-center text-sm border-4 border-background">2</div>
+                 <RefreshCw className="w-8 h-8 text-primary" />
+              </div>
+              <h4 className="text-lg font-bold text-white mb-2">Auto-Compound</h4>
+              <p className="text-sm text-text-secondary">Our contracts automatically harvest yields and restake them daily to drastically accelerate your APY.</p>
+            </motion.div>
+
+            {/* Connector */}
+            <div className="hidden md:block flex-none w-16 h-[2px] bg-gradient-to-r from-primary/50 to-purple-500/50 relative -mt-20">
+               <ArrowRight className="absolute -right-2 -top-2 w-4 h-4 text-purple-500" />
+            </div>
+
+            {/* Step 3 */}
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="flex-1 w-full flex flex-col items-center text-center px-4">
+              <div className="w-20 h-20 rounded-2xl bg-card border border-border flex items-center justify-center shadow-[0_0_30px_rgba(168,85,247,0.15)] mb-6 relative">
+                 <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-purple-500 text-white font-bold flex items-center justify-center text-sm border-4 border-background">3</div>
+                 <HandCoins className="w-8 h-8 text-purple-500" />
+              </div>
+              <h4 className="text-lg font-bold text-white mb-2">Instant Withdrawal</h4>
+              <p className="text-sm text-text-secondary">Withdraw your original capital plus all compounded interest instantly directly to your wallet.</p>
+            </motion.div>
+          </div>
+        </div>
+
         {/* Data Table Section */}
         <div className="w-full max-w-7xl">
           <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center mb-6 gap-4">
             <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-              <Zap className="text-primary w-5 h-5"/> Live Markets
+              <Layers className="text-primary w-5 h-5"/> Live Yield Markets
             </h2>
             <div className="relative w-full sm:w-auto">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
@@ -72,9 +151,10 @@ export default function Home() {
           </div>
 
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
             className="glass-card overflow-hidden"
           >
             <div className="overflow-x-auto">
@@ -92,11 +172,8 @@ export default function Home() {
                 </thead>
                 <tbody className="divide-y divide-border">
                   {filteredPools.map((pool, i) => (
-                    <motion.tr 
+                    <tr 
                       key={pool.pool}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.1 * Math.min(i, 10) }}
                       className="group hover:bg-white/[0.02] transition-colors cursor-pointer"
                     >
                       <td className="px-6 py-5">
@@ -128,7 +205,7 @@ export default function Home() {
                             Trade <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity translate-x-[-10px] group-hover:translate-x-0 duration-300" />
                          </button>
                       </td>
-                    </motion.tr>
+                    </tr>
                   ))}
                 </tbody>
               </table>
