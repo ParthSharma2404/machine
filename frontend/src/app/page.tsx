@@ -197,7 +197,8 @@ export default function Home() {
             </div>
 
             <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-              <div className="overflow-x-auto">
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-slate-100 bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
@@ -244,8 +245,55 @@ export default function Home() {
                     ))}
                   </tbody>
                 </table>
-                {filteredPools.length === 0 && <div className="p-16 text-center text-slate-500">No pools found matching your search.</div>}
               </div>
+
+              {/* Mobile Card View */}
+              <div className="md:hidden divide-y divide-slate-100">
+                {filteredPools.map((pool) => (
+                  <div key={pool.pool} onClick={() => { setLoadingPool(pool.pool); setTimeout(() => router.push(`/pools/${pool.pool}/`), 10); }} className={`p-5 transition-all cursor-pointer flex flex-col gap-4 ${loadingPool === pool.pool ? 'bg-emerald-50 pointer-events-none' : 'hover:bg-slate-50'}`}>
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-500">{pool.project.substring(0, 2).toUpperCase()}</div>
+                        <div>
+                          <span className="font-bold text-slate-900 block">{pool.project}</span>
+                          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded border border-slate-200 mt-1 inline-block">{pool.chain}</span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className="block text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-0.5">Net APY</span>
+                        <span className="font-mono text-emerald-600 font-bold text-lg leading-none">{pool.apy.toFixed(2)}%</span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                      <div>
+                        <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Asset</span>
+                        <span className="font-mono text-xs font-semibold text-slate-700">{pool.symbol}</span>
+                      </div>
+                      <div>
+                        <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">TVL</span>
+                        <span className="font-mono text-xs font-semibold text-slate-700">${(pool.tvlUsd / 1e6).toFixed(1)}M</span>
+                      </div>
+                      <div>
+                        <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Score</span>
+                        <span className={`font-mono text-xs font-bold ${pool.yieldScore >= 90 ? 'text-emerald-600' : pool.yieldScore >= 80 ? 'text-teal-600' : pool.yieldScore >= 70 ? 'text-amber-600' : pool.yieldScore >= 60 ? 'text-orange-600' : 'text-rose-600'}`}>{pool.yieldScore}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end pt-1">
+                      {loadingPool === pool.pool ? (
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">
+                          <RefreshCw className="w-3 h-3 animate-spin" /> Loading
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">Deposit <ArrowRight className="w-3 h-3" /></span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {filteredPools.length === 0 && <div className="p-16 text-center text-slate-500">No pools found matching your search.</div>}
             </motion.div>
           </div>
         </section>
