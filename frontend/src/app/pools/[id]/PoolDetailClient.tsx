@@ -227,6 +227,14 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
                 {!isConnected ? (
                   <div className="w-full flex flex-col items-center py-2">
                     <ConnectButton />
+                    
+                    <div className="mt-6 p-4 bg-blue-50/50 border border-blue-100 rounded-xl text-xs text-blue-700/80 flex gap-3 w-full">
+                      <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+                      <p>
+                        <strong>New to DeFi?</strong> You need a Web3 wallet extension (like MetaMask) installed in your browser, or a mobile wallet app to connect to these markets.
+                      </p>
+                    </div>
+
                     <button onClick={() => connect({ connector: mock({ accounts: ['0x71C7656EC7ab88b098defB751B7401B5f6d8976F'] }) })} className="mt-4 text-xs font-semibold text-slate-400 hover:text-primary transition-colors hover:underline">
                       Simulate Wallet Connection
                     </button>
