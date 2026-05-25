@@ -1,0 +1,43 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-background: #0B1014;
+  --color-foreground: #ffffff;
+  --color-primary: #00E599;
+  --color-primary-hover: #00c985;
+  --color-primary-glow: rgba(0, 229, 153, 0.15);
+  
+  --color-card: #121821;
+  --color-card-hover: #19212d;
+  --color-border: #1e293b;
+  
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #475569;
+  
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-md border border-border rounded-xl shadow-xl transition-all duration-200;
+  }
+  
+  .glass-card:hover {
+    @apply border-primary/30 shadow-[0_0_20px_rgba(0,229,153,0.1)];
+  }
+}
+
+/* RainbowKit Overrides */
+[data-rk] .ju367v1h {
+  background-color: var(--color-primary) !important;
+  color: var(--color-background) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+}

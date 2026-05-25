@@ -141,7 +141,12 @@ def main():
     with open(output_path, "w") as f:
         json.dump(filtered, f, indent=2)
         
-    print(f"Data successfully saved to {output_path}")
+    # Also write to Next.js frontend directory
+    os.makedirs("frontend/src/data", exist_ok=True)
+    with open("frontend/src/data/pools.json", "w") as f:
+        json.dump(filtered, f, indent=2)
+        
+    print(f"Data successfully saved to {output_path} and frontend/src/data/pools.json")
     print("------------------------------------------")
 
 if __name__ == "__main__":
