@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount, useSignMessage, useConnect, useSendTransaction, useBalance } from 'wagmi';
 import { mock } from 'wagmi/connectors';
+import { formatUnits } from 'viem';
 import { ArrowLeft, ShieldCheck, Activity, LineChart, LockOpen, TrendingUp, Clock, Percent, DollarSign, AlertTriangle, Info, ArrowUpRight, Layers, ExternalLink, RefreshCw, CheckCircle2, Zap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -154,12 +155,11 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
   const chainInfoForBalance = EVM_CHAINS[pool.chain];
   const { data: balanceData } = useBalance({
     address: address,
-    token: payToken === 'USDC' && chainInfoForBalance ? (chainInfoForBalance.usdc as `0x${string}`) : undefined,
     chainId: chainInfoForBalance?.id,
   });
 
-  const displayBalance = balanceData 
-    ? parseFloat(balanceData.formatted).toLocaleString(undefined, { maximumFractionDigits: 4 })
+  const displayBalance = payToken === 'ETH' && balanceData 
+    ? parseFloat(formatUnits(balanceData.value, balanceData.decimals)).toLocaleString(undefined, { maximumFractionDigits: 4 })
     : '0.00';
 
   const handleCalculateRoute = async () => {
