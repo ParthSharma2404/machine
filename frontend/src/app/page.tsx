@@ -49,7 +49,7 @@ export default function Home() {
               <Activity className="text-white w-4 h-4" />
             </div>
             <span className="font-bold text-xl tracking-tight text-slate-900">
-              Yield<span className="text-primary">Pulse</span>
+              Yeild<span className="text-primary">Pulse</span>
             </span>
           </div>
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-500">
@@ -255,7 +255,7 @@ export default function Home() {
             <div className="md:col-span-2">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center"><Activity className="text-white w-4 h-4" /></div>
-                <span className="font-bold text-xl">Yield<span className="text-blue-400">Pulse</span></span>
+                <span className="font-bold text-xl">Yeild<span className="text-blue-400">Pulse</span></span>
               </div>
               <p className="text-slate-400 text-sm leading-relaxed max-w-sm">The intelligent yield aggregator for DeFi. We find, compare, and auto-compound the best opportunities across all major protocols.</p>
             </div>
@@ -277,7 +277,7 @@ export default function Home() {
             </div>
           </div>
           <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
-            © 2025 YieldPulse. All rights reserved. Smart contract interactions carry inherent risk.
+            © 2025 YeildPulse. All rights reserved. Smart contract interactions carry inherent risk.
           </div>
         </footer>
       </main>

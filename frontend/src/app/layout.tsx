@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "YieldPulse | Institutional DeFi",
+  title: "YeildPulse | Institutional DeFi",
   description: "Premium aggregated financial data and liquidity deployment for institutional investors.",
 };
 

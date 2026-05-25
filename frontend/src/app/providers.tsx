@@ -21,7 +21,7 @@ import {
 } from '@tanstack/react-query';
 
 const config = getDefaultConfig({
-  appName: 'YieldPulse Institutional',
+  appName: 'YeildPulse Institutional',
   projectId: 'd38ea689bc7787e2085dce4eb8fe075d', // User's dedicated WalletConnect ID
   chains: [mainnet, polygon, optimism, arbitrum, base],
   transports: {

@@ -230,7 +230,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
       
       const isSimulated = address === '0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
       if (isSimulated) {
-        await signMessageAsync({ message: `YieldPulse Simulation:\n\nApprove mock routing of ${amount} ${payToken} into ${pool.project} ${pool.chain}.\nDeveloper Fee (0.5%): ${routeData.developerFee} ${payToken}` });
+        await signMessageAsync({ message: `YeildPulse Simulation:\n\nApprove mock routing of ${amount} ${payToken} into ${pool.project} ${pool.chain}.\nDeveloper Fee (0.5%): ${routeData.developerFee} ${payToken}` });
         setZapState('success');
         return;
       }
@@ -268,7 +268,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
             <button onClick={() => router.back()} className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors"><ArrowLeft className="w-4 h-4 text-slate-600" /></button>
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push('/')}>
               <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center"><Activity className="text-white w-4 h-4" /></div>
-              <span className="font-bold text-xl tracking-tight text-slate-900">Yield<span className="text-primary">Pulse</span></span>
+              <span className="font-bold text-xl tracking-tight text-slate-900">Yeild<span className="text-primary">Pulse</span></span>
             </div>
           </div>
           <ConnectButton />
