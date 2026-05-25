@@ -22,9 +22,9 @@ import {
 
 const config = getDefaultConfig({
   appName: 'YieldPulse Institutional',
-  projectId: 'fce3a600eeb146238662bc9a32663123', // Demo projectId for RainbowKit
+  projectId: 'c08e50b5ba53ef1baee1032dfbc4dd64', // Public demo projectId for RainbowKit docs
   chains: [mainnet, polygon, optimism, arbitrum, base],
-  ssr: false, // Disabled SSR to fix Next.js static export hydration mismatches
+  ssr: false, 
 });
 
 const queryClient = new QueryClient();
