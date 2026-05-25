@@ -1,0 +1,121 @@
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1>Find the Highest Yields in Crypto & DeFi</h1>
+        <p>Real-time index of the highest-earning stablecoin pools, liquid staking tokens, and alternative yields. Filtered, monitored, and analyzed for risk.</p>
+    </div>
+</section>
+
+<!-- Dashboard Directory Panel -->
+<section class="directory">
+    <div class="container">
+        
+        <!-- Premium Live Search and Filtering Bar -->
+        <div class="glass-card filter-bar">
+            <div class="search-input-wrapper">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search by asset, protocol, or network (e.g. USDC, Aave, Solana)...">
+            </div>
+            <div>
+                <select id="chainSelect" class="filter-select">
+                    <option value="">All Networks</option>
+                    <option value="Ethereum">Ethereum</option>
+                    <option value="Solana">Solana</option>
+                    <option value="Arbitrum">Arbitrum</option>
+                    <option value="Optimism">Optimism</option>
+                </select>
+            </div>
+            <div>
+                <select id="riskSelect" class="filter-select">
+                    <option value="">All Risk Tiers</option>
+                    <option value="Low">Low Risk (< 6% APY)</option>
+                    <option value="Medium">Medium Risk (6% - 12% APY)</option>
+                    <option value="High">High Risk (> 12% APY)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Dynamic Static Table -->
+        <div class="table-wrapper">
+            <table id="yieldsTable">
+                <thead>
+                    <tr>
+                        <th style="cursor: pointer;" onclick="sortTable(0)">Platform</th>
+                        <th style="cursor: pointer;" onclick="sortTable(1)">Asset</th>
+                        <th style="cursor: pointer;" onclick="sortTable(2)">Blockchain</th>
+                        <th style="cursor: pointer;" onclick="sortTable(3, true)">APY</th>
+                        <th style="cursor: pointer;" onclick="sortTable(4, true)">TVL (USD)</th>
+                        <th>Safety Tier</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    {{ table_rows }}
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</section>
+
+<!-- Embedded Client-Side Interactive Engine -->
+<script>
+    // Live Search and Multi-Filtering Engine
+    const searchInput = document.getElementById('searchInput');
+    const chainSelect = document.getElementById('chainSelect');
+    const riskSelect = document.getElementById('riskSelect');
+    const tableBody = document.getElementById('tableBody');
+    const rows = Array.from(tableBody.getElementsByTagName('tr'));
+
+    function filterTable() {
+        const searchQuery = searchInput.value.toLowerCase().trim();
+        const selectedChain = chainSelect.value;
+        const selectedRisk = riskSelect.value;
+
+        rows.forEach(row => {
+            const project = row.getAttribute('data-project').toLowerCase();
+            const symbol = row.getAttribute('data-symbol').toLowerCase();
+            const chain = row.getAttribute('data-chain');
+            const risk = row.getAttribute('data-risk');
+            
+            const matchesSearch = project.includes(searchQuery) || symbol.includes(searchQuery) || chain.toLowerCase().includes(searchQuery);
+            const matchesChain = !selectedChain || chain === selectedChain;
+            const matchesRisk = !selectedRisk || risk === selectedRisk;
+
+            if (matchesSearch && matchesChain && matchesRisk) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    searchInput.addEventListener('input', filterTable);
+    chainSelect.addEventListener('change', filterTable);
+    riskSelect.addEventListener('change', filterTable);
+
+    // Advanced Sorting Engine for APY and TVL
+    let sortDirections = [true, true, true, true, true]; // tracks ASC/DESC
+    
+    function sortTable(colIndex, isNumeric = false) {
+        const sortedDirection = sortDirections[colIndex];
+        sortDirections[colIndex] = !sortedDirection;
+        
+        const sortedRows = rows.sort((a, b) => {
+            let valA = a.cells[colIndex].getAttribute('data-sort-value') || a.cells[colIndex].innerText || a.cells[colIndex].textContent;
+            let valB = b.cells[colIndex].getAttribute('data-sort-value') || b.cells[colIndex].innerText || b.cells[colIndex].textContent;
+            
+            if (isNumeric) {
+                return sortedDirection 
+                    ? parseFloat(valA) - parseFloat(valB) 
+                    : parseFloat(valB) - parseFloat(valA);
+            } else {
+                return sortedDirection 
+                    ? valA.localeCompare(valB) 
+                    : valB.localeCompare(valA);
+            }
+        });
+        
+        // Re-append sorted rows to body
+        sortedRows.forEach(row => tableBody.appendChild(row));
+    }
+</script>

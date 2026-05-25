@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Ethereum DeFi Staking Pools & APY Yields | YieldPulse</title>
+    <meta name="description" content="Maximize your returns on the Ethereum blockchain network. Real-time comparison of liquidity vaults and secure yield generators.">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <!-- Glassmorphic Header -->
+    <header>
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                YieldPulse<span>AGGREGATOR</span>
+            </a>
+            <nav>
+                <a href="/">Dashboard</a>
+                <a href="/stablecoins/usdc.html">USDC Yields</a>
+                <a href="/stablecoins/usdt.html">USDT Yields</a>
+                <a href="/chains/ethereum.html">Ethereum Pools</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Content Injector -->
+    <main>
+        <!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1>Top Ethereum Yield Pools & Staking</h1>
+        <p>Compare annual percentage returns (APY) and liquidity pools running on the high-performance Ethereum network. Filtered, monitored, and analyzed for risk.</p>
+    </div>
+</section>
+
+<!-- Dashboard Directory Panel -->
+<section class="directory">
+    <div class="container">
+        
+        <!-- Premium Live Search and Filtering Bar -->
+        <div class="glass-card filter-bar">
+            <div class="search-input-wrapper">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search by asset, protocol, or network (e.g. USDC, Aave, Solana)...">
+            </div>
+            <div>
+                <select id="chainSelect" class="filter-select">
+                    <option value="">All Networks</option>
+                    <option value="Ethereum">Ethereum</option>
+                    <option value="Solana">Solana</option>
+                    <option value="Arbitrum">Arbitrum</option>
+                    <option value="Optimism">Optimism</option>
+                </select>
+            </div>
+            <div>
+                <select id="riskSelect" class="filter-select">
+                    <option value="">All Risk Tiers</option>
+                    <option value="Low">Low Risk (< 6% APY)</option>
+                    <option value="Medium">Medium Risk (6% - 12% APY)</option>
+                    <option value="High">High Risk (> 12% APY)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Dynamic Static Table -->
+        <div class="table-wrapper">
+            <table id="yieldsTable">
+                <thead>
+                    <tr>
+                        <th style="cursor: pointer;" onclick="sortTable(0)">Platform</th>
+                        <th style="cursor: pointer;" onclick="sortTable(1)">Asset</th>
+                        <th style="cursor: pointer;" onclick="sortTable(2)">Blockchain</th>
+                        <th style="cursor: pointer;" onclick="sortTable(3, true)">APY</th>
+                        <th style="cursor: pointer;" onclick="sortTable(4, true)">TVL (USD)</th>
+                        <th>Safety Tier</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    
+        <tr data-project="Ethena" data-symbol="USDE" data-chain="Ethereum" data-risk="High">
+            <td><strong>Ethena</strong></td>
+            <td data-sort-value="USDE">USDE</td>
+            <td><span class="badge badge-chain">Ethereum</span></td>
+            <td class="badge-apy" data-sort-value="18.2">18.2%</td>
+            <td data-sort-value="2400000000">$2.40B</td>
+            <td><span class="badge badge-risk high">High</span></td>
+            <td><a href="/pools/ethena-usde-savax.html" class="btn btn-secondary btn-sm">View Pool</a></td>
+        </tr>
+        
+
+        <tr data-project="Curve" data-symbol="USDT-WBTC-WETH" data-chain="Ethereum" data-risk="High">
+            <td><strong>Curve</strong></td>
+            <td data-sort-value="USDT-WBTC-WETH">USDT-WBTC-WETH</td>
+            <td><span class="badge badge-chain">Ethereum</span></td>
+            <td class="badge-apy" data-sort-value="15.42">15.42%</td>
+            <td data-sort-value="115000000">$115.0M</td>
+            <td><span class="badge badge-risk high">High</span></td>
+            <td><a href="/pools/curve-tricrypto-ethereum.html" class="btn btn-secondary btn-sm">View Pool</a></td>
+        </tr>
+        
+
+        <tr data-project="Morpho Blue" data-symbol="USDC" data-chain="Ethereum" data-risk="Medium">
+            <td><strong>Morpho Blue</strong></td>
+            <td data-sort-value="USDC">USDC</td>
+            <td><span class="badge badge-chain">Ethereum</span></td>
+            <td class="badge-apy" data-sort-value="8.1">8.1%</td>
+            <td data-sort-value="145000000">$145.0M</td>
+            <td><span class="badge badge-risk medium">Medium</span></td>
+            <td><a href="/pools/morpho-usdc-ethereum.html" class="btn btn-secondary btn-sm">View Pool</a></td>
+        </tr>
+        
+
+        <tr data-project="Yearn Finance" data-symbol="USDC" data-chain="Ethereum" data-risk="Medium">
+            <td><strong>Yearn Finance</strong></td>
+            <td data-sort-value="USDC">USDC</td>
+            <td><span class="badge badge-chain">Ethereum</span></td>
+            <td class="badge-apy" data-sort-value="7.4">7.4%</td>
+            <td data-sort-value="98000000">$98.0M</td>
+            <td><span class="badge badge-risk medium">Medium</span></td>
+            <td><a href="/pools/yearn-yvusdc-ethereum.html" class="btn btn-secondary btn-sm">View Pool</a></td>
+        </tr>
+        
+
+        <tr data-project="Aave V3" data-symbol="USDT" data-chain="Ethereum" data-risk="Medium">
+            <td><strong>Aave V3</strong></td>
+            <td data-sort-value="USDT">USDT</td>
+            <td><span class="badge badge-chain">Ethereum</span></td>
+            <td class="badge-apy" data-sort-value="7.12">7.12%</td>
+            <td data-sort-value="620400000">$620.4M</td>
+            <td><span class="badge badge-risk medium">Medium</span></td>
+            <td><a href="/pools/aave-v3-usdt-ethereum.html" class="btn btn-secondary btn-sm">View Pool</a></td>
+        </tr>
+        
+
+        <tr data-project="Aave V3" data-symbol="USDC" data-chain="Ethereum" data-risk="Medium">
+            <td><strong>Aave V3</strong></td>
+            <td data-sort-value="USDC">USDC</td>
+            <td><span class="badge badge-chain">Ethereum</span></td>
+            <td class="badge-apy" data-sort-value="6.85">6.85%</td>
+            <td data-sort-value="845200000">$845.2M</td>
+            <td><span class="badge badge-risk medium">Medium</span></td>
+            <td><a href="/pools/aave-v3-usdc-ethereum.html" class="btn btn-secondary btn-sm">View Pool</a></td>
+        </tr>
+        
+
+        <tr data-project="Compound V3" data-symbol="USDC" data-chain="Ethereum" data-risk="Medium">
+            <td><strong>Compound V3</strong></td>
+            <td data-sort-value="USDC">USDC</td>
+            <td><span class="badge badge-chain">Ethereum</span></td>
+            <td class="badge-apy" data-sort-value="6.2">6.2%</td>
+            <td data-sort-value="410300000">$410.3M</td>
+            <td><span class="badge badge-risk medium">Medium</span></td>
+            <td><a href="/pools/compound-v3-usdc-ethereum.html" class="btn btn-secondary btn-sm">View Pool</a></td>
+        </tr>
+        
+
+        <tr data-project="MakerDAO" data-symbol="DAI" data-chain="Ethereum" data-risk="Low">
+            <td><strong>MakerDAO</strong></td>
+            <td data-sort-value="DAI">DAI</td>
+            <td><span class="badge badge-chain">Ethereum</span></td>
+            <td class="badge-apy" data-sort-value="5.0">5.0%</td>
+            <td data-sort-value="1250000000">$1.25B</td>
+            <td><span class="badge badge-risk low">Low</span></td>
+            <td><a href="/pools/makerdao-dsr-ethereum.html" class="btn btn-secondary btn-sm">View Pool</a></td>
+        </tr>
+        
+
+        <tr data-project="Ether.fi" data-symbol="ETH" data-chain="Ethereum" data-risk="Low">
+            <td><strong>Ether.fi</strong></td>
+            <td data-sort-value="ETH">ETH</td>
+            <td><span class="badge badge-chain">Ethereum</span></td>
+            <td class="badge-apy" data-sort-value="3.85">3.85%</td>
+            <td data-sort-value="5400000000">$5.40B</td>
+            <td><span class="badge badge-risk low">Low</span></td>
+            <td><a href="/pools/etherfi-eeth-ethereum.html" class="btn btn-secondary btn-sm">View Pool</a></td>
+        </tr>
+        
+
+        <tr data-project="Swell" data-symbol="ETH" data-chain="Ethereum" data-risk="Low">
+            <td><strong>Swell</strong></td>
+            <td data-sort-value="ETH">ETH</td>
+            <td><span class="badge badge-chain">Ethereum</span></td>
+            <td class="badge-apy" data-sort-value="3.65">3.65%</td>
+            <td data-sort-value="950000000">$950.0M</td>
+            <td><span class="badge badge-risk low">Low</span></td>
+            <td><a href="/pools/swell-sweth-ethereum.html" class="btn btn-secondary btn-sm">View Pool</a></td>
+        </tr>
+        
+
+        <tr data-project="Lido" data-symbol="ETH" data-chain="Ethereum" data-risk="Low">
+            <td><strong>Lido</strong></td>
+            <td data-sort-value="ETH">ETH</td>
+            <td><span class="badge badge-chain">Ethereum</span></td>
+            <td class="badge-apy" data-sort-value="3.42">3.42%</td>
+            <td data-sort-value="18450000000">$18.45B</td>
+            <td><span class="badge badge-risk low">Low</span></td>
+            <td><a href="/pools/lido-wsteth-ethereum.html" class="btn btn-secondary btn-sm">View Pool</a></td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</section>
+
+<!-- Embedded Client-Side Interactive Engine -->
+<script>
+    // Live Search and Multi-Filtering Engine
+    const searchInput = document.getElementById('searchInput');
+    const chainSelect = document.getElementById('chainSelect');
+    const riskSelect = document.getElementById('riskSelect');
+    const tableBody = document.getElementById('tableBody');
+    const rows = Array.from(tableBody.getElementsByTagName('tr'));
+
+    function filterTable() {
+        const searchQuery = searchInput.value.toLowerCase().trim();
+        const selectedChain = chainSelect.value;
+        const selectedRisk = riskSelect.value;
+
+        rows.forEach(row => {
+            const project = row.getAttribute('data-project').toLowerCase();
+            const symbol = row.getAttribute('data-symbol').toLowerCase();
+            const chain = row.getAttribute('data-chain');
+            const risk = row.getAttribute('data-risk');
+            
+            const matchesSearch = project.includes(searchQuery) || symbol.includes(searchQuery) || chain.toLowerCase().includes(searchQuery);
+            const matchesChain = !selectedChain || chain === selectedChain;
+            const matchesRisk = !selectedRisk || risk === selectedRisk;
+
+            if (matchesSearch && matchesChain && matchesRisk) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    searchInput.addEventListener('input', filterTable);
+    chainSelect.addEventListener('change', filterTable);
+    riskSelect.addEventListener('change', filterTable);
+
+    // Advanced Sorting Engine for APY and TVL
+    let sortDirections = [true, true, true, true, true]; // tracks ASC/DESC
+    
+    function sortTable(colIndex, isNumeric = false) {
+        const sortedDirection = sortDirections[colIndex];
+        sortDirections[colIndex] = !sortedDirection;
+        
+        const sortedRows = rows.sort((a, b) => {
+            let valA = a.cells[colIndex].getAttribute('data-sort-value') || a.cells[colIndex].innerText || a.cells[colIndex].textContent;
+            let valB = b.cells[colIndex].getAttribute('data-sort-value') || b.cells[colIndex].innerText || b.cells[colIndex].textContent;
+            
+            if (isNumeric) {
+                return sortedDirection 
+                    ? parseFloat(valA) - parseFloat(valB) 
+                    : parseFloat(valB) - parseFloat(valA);
+            } else {
+                return sortedDirection 
+                    ? valA.localeCompare(valB) 
+                    : valB.localeCompare(valA);
+            }
+        });
+        
+        // Re-append sorted rows to body
+        sortedRows.forEach(row => tableBody.appendChild(row));
+    }
+</script>
+
+    </main>
+
+    <!-- Semantic SEO Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>YieldPulse</h4>
+                    <p style="margin-top: 10px; font-size: 0.85rem; line-height: 1.5;">
+                        YieldPulse is an automated, real-time index of the highest-yielding DeFi & CeFi investment opportunities. Track, compare, and filter assets securely.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Stablecoins</h4>
+                    <ul>
+                        <li><a href="/stablecoins/usdc.html">USDC Pools</a></li>
+                        <li><a href="/stablecoins/usdt.html">USDT Pools</a></li>
+                        <li><a href="/stablecoins/dai.html">DAI Pools</a></li>
+                        <li><a href="/stablecoins/usde.html">USDe Pools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Networks</h4>
+                    <ul>
+                        <li><a href="/chains/ethereum.html">Ethereum (L1)</a></li>
+                        <li><a href="/chains/solana.html">Solana (L1)</a></li>
+                        <li><a href="/chains/arbitrum.html">Arbitrum (L2)</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal & Safety</h4>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Risk Disclaimers</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="border-top: 1px solid var(--border-color); padding-top: 20px; text-align: center; font-size: 0.8rem;">
+                <p>&copy; 2026 YieldPulse Aggregator. All data fetched or aggregated automatically from trusted liquidity sources. Past returns do not guarantee future yields.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

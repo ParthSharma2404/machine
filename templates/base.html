@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | YieldPulse</title>
+    <meta name="description" content="{{ description }}">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <!-- Glassmorphic Header -->
+    <header>
+        <div class="container header-inner">
+            <a href="/" class="logo">
+                YieldPulse<span>AGGREGATOR</span>
+            </a>
+            <nav>
+                <a href="/">Dashboard</a>
+                <a href="/stablecoins/usdc.html">USDC Yields</a>
+                <a href="/stablecoins/usdt.html">USDT Yields</a>
+                <a href="/chains/ethereum.html">Ethereum Pools</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Content Injector -->
+    <main>
+        {{ content }}
+    </main>
+
+    <!-- Semantic SEO Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>YieldPulse</h4>
+                    <p style="margin-top: 10px; font-size: 0.85rem; line-height: 1.5;">
+                        YieldPulse is an automated, real-time index of the highest-yielding DeFi & CeFi investment opportunities. Track, compare, and filter assets securely.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Stablecoins</h4>
+                    <ul>
+                        <li><a href="/stablecoins/usdc.html">USDC Pools</a></li>
+                        <li><a href="/stablecoins/usdt.html">USDT Pools</a></li>
+                        <li><a href="/stablecoins/dai.html">DAI Pools</a></li>
+                        <li><a href="/stablecoins/usde.html">USDe Pools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Networks</h4>
+                    <ul>
+                        <li><a href="/chains/ethereum.html">Ethereum (L1)</a></li>
+                        <li><a href="/chains/solana.html">Solana (L1)</a></li>
+                        <li><a href="/chains/arbitrum.html">Arbitrum (L2)</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal & Safety</h4>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Risk Disclaimers</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="border-top: 1px solid var(--border-color); padding-top: 20px; text-align: center; font-size: 0.8rem;">
+                <p>&copy; 2026 YieldPulse Aggregator. All data fetched or aggregated automatically from trusted liquidity sources. Past returns do not guarantee future yields.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
