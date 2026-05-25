@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[49448,["/_next/static/chunks/0qs.1ac3c4xcy.js","/_next/static/chunks/10ko4yxhbtdhw.js","/_next/static/chunks/0fx5rxacy86d2.js","/_next/static/chunks/0w9eiucb4j.sk.js","/_next/static/chunks/0lb.64g3d2pf6.js","/_next/static/chunks/0vw~mciu~xs0v.js","/_next/static/chunks/0-un40od7zvim.js"],"default"]
+3:I[97367,["/_next/static/chunks/0qs.1ac3c4xcy.js","/_next/static/chunks/10ko4yxhbtdhw.js","/_next/static/chunks/0fx5rxacy86d2.js","/_next/static/chunks/0w9eiucb4j.sk.js","/_next/static/chunks/0lb.64g3d2pf6.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"pool":{"pool":"71fa0340-09b5-4635-887b-1ce010e602ad","project":"stake-dao","symbol":"MSETH-WETH","baseAsset":"ETH","chain":"Ethereum","apy":10.01,"tvlUsd":6048247,"exposure":"multi","riskLevel":"Medium","yieldScore":28}}],[["$","script","script-0",{"src":"/_next/static/chunks/0vw~mciu~xs0v.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/0-un40od7zvim.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"YqL-8T1YiPASyYvRZ0J4h"}
+5:null
