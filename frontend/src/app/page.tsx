@@ -27,6 +27,7 @@ function AnimatedCounter({ target, prefix = '', suffix = '' }: { target: number;
 export default function Home() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
+  const [loadingPool, setLoadingPool] = useState<string | null>(null);
   
   const filteredPools = poolsData.filter(pool => 
     pool.project.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -210,7 +211,7 @@ export default function Home() {
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {filteredPools.map((pool) => (
-                      <tr key={pool.pool} onClick={() => router.push(`/pools/${pool.pool}/`)} className="group hover:bg-blue-50/40 transition-all cursor-pointer">
+                      <tr key={pool.pool} onClick={() => { setLoadingPool(pool.pool); router.push(`/pools/${pool.pool}/`); }} className={`group transition-all cursor-pointer ${loadingPool === pool.pool ? 'bg-blue-50/80 pointer-events-none' : 'hover:bg-blue-50/40'}`}>
                         <td className="px-6 py-5">
                           <div className="flex items-center gap-3">
                             <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 group-hover:bg-primary group-hover:text-white transition-colors">{pool.project.substring(0, 2).toUpperCase()}</div>
@@ -230,7 +231,13 @@ export default function Home() {
                           </div>
                         </td>
                         <td className="px-6 py-5 text-right">
-                          <span className="inline-flex items-center gap-1 text-sm font-medium text-slate-400 group-hover:text-primary transition-colors">Deposit <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></span>
+                          {loadingPool === pool.pool ? (
+                            <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                              <RefreshCw className="w-4 h-4 animate-spin" /> Loading...
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-sm font-medium text-slate-400 group-hover:text-primary transition-colors">Deposit <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></span>
+                          )}
                         </td>
                       </tr>
                     ))}
