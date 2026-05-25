@@ -274,7 +274,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
               <span className="font-bold text-xl tracking-tight text-slate-900">Yeild<span className="text-emerald-600">Pulse</span></span>
             </div>
           </div>
-          <ConnectButton />
+          <ConnectButton showBalance={false} chainStatus="icon" />
         </div>
       </header>
 
@@ -401,7 +401,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
 
                 {!isConnected ? (
                   <div className="w-full flex flex-col items-center py-2">
-                    <ConnectButton />
+                    <ConnectButton showBalance={false} chainStatus="icon" />
                     
                     <div className="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 flex gap-3 w-full">
                       <Info className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />

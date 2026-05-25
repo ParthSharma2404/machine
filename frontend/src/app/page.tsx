@@ -57,7 +57,7 @@ export default function Home() {
             <a href="#features" className="hover:text-emerald-600 transition-colors">Features</a>
             <a href="#how-it-works" className="hover:text-emerald-600 transition-colors">How It Works</a>
           </nav>
-          <ConnectButton />
+          <ConnectButton showBalance={false} chainStatus="icon" />
         </div>
       </header>
 
