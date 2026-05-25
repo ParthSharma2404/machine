@@ -6,6 +6,7 @@ import { useAccount } from 'wagmi';
 import { ArrowLeft, ShieldCheck, Activity, LineChart, LockOpen, TrendingUp, Clock, Percent, DollarSign, AlertTriangle, Info, ArrowUpRight, Layers, ExternalLink } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
 const protocolDescriptions: Record<string, string> = {
   'Pendle': 'Pendle Finance is a permissionless yield-trading protocol that enables the tokenization and trading of future yield. Users can lock in fixed yields or speculate on variable yield movements.',
@@ -19,36 +20,49 @@ const protocolDescriptions: Record<string, string> = {
   'default': 'A leading DeFi protocol providing competitive yields through automated strategies and battle-tested smart contracts.'
 };
 
-function MiniChart({ apy }: { apy: number }) {
-  const points = Array.from({ length: 30 }, (_, i) => {
+function generateChartData(apy: number) {
+  const today = new Date();
+  return Array.from({ length: 30 }, (_, i) => {
+    const date = new Date(today);
+    date.setDate(date.getDate() - (29 - i));
     const base = apy * 0.85;
     const variation = Math.sin(i * 0.5) * apy * 0.08 + Math.cos(i * 0.3) * apy * 0.05;
     const trend = (i / 30) * apy * 0.15;
-    return base + variation + trend;
+    return {
+      date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      apy: parseFloat((base + variation + trend).toFixed(2)),
+    };
   });
-  const min = Math.min(...points);
-  const max = Math.max(...points);
-  const range = max - min || 1;
-  const height = 120;
-  const width = 400;
-  const pathData = points.map((p, i) => {
-    const x = (i / (points.length - 1)) * width;
-    const y = height - ((p - min) / range) * (height - 20) - 10;
-    return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
-  }).join(' ');
-  const areaData = pathData + ` L ${width} ${height} L 0 ${height} Z`;
+}
 
+function ChartTooltip({ active, payload, label }: any) {
+  if (!active || !payload?.length) return null;
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-[120px]">
-      <defs>
-        <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="rgb(16, 185, 129)" stopOpacity="0.2" />
-          <stop offset="100%" stopColor="rgb(16, 185, 129)" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <path d={areaData} fill="url(#chartGrad)" />
-      <path d={pathData} fill="none" stroke="rgb(16, 185, 129)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <div className="bg-white border border-slate-200 rounded-xl px-4 py-3 shadow-lg">
+      <p className="text-xs text-slate-400 mb-1">{label}</p>
+      <p className="text-lg font-bold font-mono text-emerald-600">{payload[0].value.toFixed(2)}%</p>
+    </div>
+  );
+}
+
+function InteractiveChart({ apy }: { apy: number }) {
+  const data = generateChartData(apy);
+  return (
+    <ResponsiveContainer width="100%" height={200}>
+      <AreaChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+        <defs>
+          <linearGradient id="apyGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#10B981" stopOpacity={0.2} />
+            <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+        <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} interval={6} />
+        <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} domain={['dataMin - 0.5', 'dataMax + 0.5']} />
+        <Tooltip content={<ChartTooltip />} cursor={{ stroke: '#cbd5e1', strokeDasharray: '4 4' }} />
+        <Area type="monotone" dataKey="apy" stroke="#10B981" strokeWidth={2.5} fill="url(#apyGradient)" activeDot={{ r: 6, fill: '#10B981', stroke: '#fff', strokeWidth: 2 }} />
+      </AreaChart>
+    </ResponsiveContainer>
   );
 }
 
@@ -115,8 +129,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
                   <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2"><LineChart className="w-5 h-5 text-primary" /> APY Performance (30d)</h2>
                   <span className="flex items-center gap-1 text-sm font-semibold text-emerald-600"><TrendingUp className="w-4 h-4" /> +{(pool.apy * 0.05).toFixed(2)}%</span>
                 </div>
-                <MiniChart apy={pool.apy} />
-                <div className="flex justify-between text-xs text-slate-400 mt-2 px-1"><span>30 days ago</span><span>Today</span></div>
+                <InteractiveChart apy={pool.apy} />
               </div>
             </motion.div>
 

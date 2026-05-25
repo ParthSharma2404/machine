@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { motion } from 'framer-motion';
-import { Search, Shield, ArrowRight, ShieldCheck, LockOpen, ArrowDownToLine, RefreshCw, HandCoins, BarChart3, Layers, Activity, TrendingUp, Globe, Users, Sparkles, ChevronRight, ExternalLink } from 'lucide-react';
+import { Search, Shield, ArrowRight, ShieldCheck, LockOpen, ArrowDownToLine, RefreshCw, HandCoins, BarChart3, Layers, Activity, TrendingUp, Globe, Users, Rocket, ChevronRight, ExternalLink } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import poolsData from '../data/pools.json'; 
 
@@ -63,7 +63,6 @@ export default function Home() {
       <main className="flex-grow">
         {/* Hero with Mesh Background */}
         <section className="relative overflow-hidden bg-mesh">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(30,58,138,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(30,58,138,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
           <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-24">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-center max-w-4xl mx-auto mb-16">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-primary text-sm font-semibold mb-8 border border-blue-100">
@@ -78,7 +77,7 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="#markets" className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-primary/20 transition-all hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98]">
-                  <Sparkles className="w-5 h-5" /> Explore Markets
+                  <Rocket className="w-5 h-5" /> Explore Markets
                 </a>
                 <a href="#how-it-works" className="inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-700 font-semibold px-8 py-4 rounded-xl border border-slate-200 shadow-sm transition-all">
                   How It Works <ChevronRight className="w-4 h-4" />
