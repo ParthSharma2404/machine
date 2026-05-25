@@ -35,8 +35,8 @@ export default function Home() {
   );
 
   const totalTVL = poolsData.reduce((sum, p) => sum + p.tvlUsd, 0);
-  const top100Pools = [...poolsData].sort((a, b) => b.apy - a.apy).slice(0, 100);
-  const avgAPY = top100Pools.reduce((sum, p) => sum + p.apy, 0) / top100Pools.length;
+  const displayPools = filteredPools.slice(0, 15);
+  const avgAPY = displayPools.length > 0 ? displayPools.reduce((sum, p) => sum + p.apy, 0) / displayPools.length : 0;
   const protocols = new Set(poolsData.map(p => p.project)).size;
   const chains = new Set(poolsData.map(p => p.chain)).size;
 
@@ -95,7 +95,7 @@ export default function Home() {
               {[
                 { label: 'Total Value Locked', value: <AnimatedCounter target={Math.round(totalTVL / 1e9)} prefix="$" suffix="B+" />, icon: <TrendingUp className="w-5 h-5 text-emerald-500" /> },
                 { label: 'Protocols Tracked', value: <AnimatedCounter target={protocols} suffix="+" />, icon: <Globe className="w-5 h-5 text-emerald-500" /> },
-                { label: 'Avg. Top APY', value: <AnimatedCounter target={Math.round(avgAPY)} suffix="%" />, icon: <BarChart3 className="w-5 h-5 text-emerald-500" /> },
+                { label: 'Avg. Net APY', value: <AnimatedCounter target={Math.round(avgAPY)} suffix="%" />, icon: <BarChart3 className="w-5 h-5 text-emerald-500" /> },
                 { label: 'Networks Covered', value: <AnimatedCounter target={chains} />, icon: <Layers className="w-5 h-5 text-emerald-500" /> },
               ].map((stat, i) => (
                 <div key={i} className="glass-card px-5 py-4 text-center hover:!transform-none bg-white/80 backdrop-blur-sm">
