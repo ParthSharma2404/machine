@@ -21,14 +21,86 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
+  
+  ::selection {
+    background: rgba(30, 58, 138, 0.15);
+  }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-card border border-border rounded-xl shadow-sm transition-all duration-200;
+    @apply bg-card border border-border rounded-xl shadow-sm transition-all duration-300;
   }
   
   .glass-card:hover {
-    @apply shadow-md border-slate-300;
+    @apply shadow-lg border-slate-300;
+    transform: translateY(-2px);
+  }
+
+  .gradient-border {
+    position: relative;
+    border-radius: 1rem;
+    background: white;
+    overflow: hidden;
+  }
+  
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #1E3A8A, #3B82F6, #10B981);
+  }
+  
+  .stat-glow {
+    text-shadow: 0 0 40px rgba(16, 185, 129, 0.3);
+  }
+  
+  .pulse-dot {
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.5); }
+  }
+  
+  .float-animation {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .shimmer {
+    background: linear-gradient(90deg, transparent 0%, rgba(30,58,138,0.04) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 50%, #10B981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .bg-mesh {
+    background-image: 
+      radial-gradient(at 40% 20%, rgba(30, 58, 138, 0.04) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(59, 130, 246, 0.04) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, rgba(16, 185, 129, 0.03) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, rgba(99, 102, 241, 0.03) 0px, transparent 50%);
   }
 }

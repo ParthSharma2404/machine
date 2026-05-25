@@ -1,11 +1,28 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { motion } from 'framer-motion';
-import { Search, Shield, Zap, Activity, ArrowRight, ShieldCheck, LockOpen, ArrowDownToLine, RefreshCw, HandCoins, BarChart3, Layers } from 'lucide-react';
+import { Search, Shield, ArrowRight, ShieldCheck, LockOpen, ArrowDownToLine, RefreshCw, HandCoins, BarChart3, Layers, Activity, TrendingUp, Globe, Users, Sparkles, ChevronRight, ExternalLink } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import poolsData from '../data/pools.json'; 
+
+function AnimatedCounter({ target, prefix = '', suffix = '' }: { target: number; prefix?: string; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    const duration = 2000;
+    const steps = 60;
+    const increment = target / steps;
+    let current = 0;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) { setCount(target); clearInterval(timer); }
+      else setCount(Math.floor(current));
+    }, duration / steps);
+    return () => clearInterval(timer);
+  }, [target]);
+  return <span>{prefix}{count.toLocaleString()}{suffix}</span>;
+}
 
 export default function Home() {
   const router = useRouter();
@@ -16,208 +33,219 @@ export default function Home() {
     pool.symbol.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const totalTVL = poolsData.reduce((sum, p) => sum + p.tvlUsd, 0);
+  const avgAPY = poolsData.reduce((sum, p) => sum + p.apy, 0) / poolsData.length;
+  const protocols = new Set(poolsData.map(p => p.project)).size;
+  const chains = new Set(poolsData.map(p => p.chain)).size;
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
-      {/* Premium Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-border px-6 py-4 shadow-sm">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-border px-6 py-3 shadow-sm">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Activity className="text-primary w-6 h-6" />
+            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+              <Activity className="text-white w-4 h-4" />
+            </div>
             <span className="font-bold text-xl tracking-tight text-slate-900">
               Yield<span className="text-primary">Pulse</span>
             </span>
           </div>
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-500">
+            <a href="#markets" className="hover:text-primary transition-colors">Markets</a>
+            <a href="#features" className="hover:text-primary transition-colors">Features</a>
+            <a href="#how-it-works" className="hover:text-primary transition-colors">How It Works</a>
+          </nav>
           <ConnectButton />
         </div>
       </header>
 
-      <main className="flex-grow flex flex-col items-center px-6 pt-16 pb-20">
-        
-        {/* Hero Section */}
-        <motion.div 
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="text-center max-w-4xl mb-24 mt-8"
-        >
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.1, duration: 0.3 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-primary text-sm font-semibold mb-8 border border-blue-100"
-          >
-            <Shield className="w-4 h-4" /> Institutional Grade Security
-          </motion.div>
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 leading-tight">
-            Deploy Capital with <br/> Absolute <span className="text-primary">Precision.</span>
-          </h1>
-          <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto font-light leading-relaxed">
-            Access real-time aggregated liquidity pools and staking vaults. Secure, audited, and optimized for maximum yield on digital assets.
-          </p>
-        </motion.div>
-
-        {/* Why YieldPulse Section */}
-        <div className="w-full max-w-7xl mb-28">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">The YieldPulse Advantage</h2>
-            <p className="text-slate-500 max-w-2xl mx-auto">Why sophisticated investors choose our platform to deploy their capital.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-card p-8 relative overflow-hidden group">
-               <div className="absolute top-0 left-0 w-1 h-full bg-blue-600 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-               <BarChart3 className="w-10 h-10 text-blue-600 mb-6" />
-               <h3 className="text-xl font-bold text-slate-900 mb-3">Highest Market Yields</h3>
-               <p className="text-slate-600 text-sm leading-relaxed">Our aggregator instantly scans Aave, Curve, Pendle, and dozens of other protocols to find you the absolute highest returning pools in DeFi.</p>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="glass-card p-8 relative overflow-hidden group">
-               <div className="absolute top-0 left-0 w-1 h-full bg-emerald-600 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-               <ShieldCheck className="w-10 h-10 text-emerald-600 mb-6" />
-               <h3 className="text-xl font-bold text-slate-900 mb-3">Audited & Secure</h3>
-               <p className="text-slate-600 text-sm leading-relaxed">We only list pools that have undergone rigorous smart contract audits by top-tier security firms like OpenZeppelin and Trail of Bits.</p>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="glass-card p-8 relative overflow-hidden group">
-               <div className="absolute top-0 left-0 w-1 h-full bg-indigo-600 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-               <LockOpen className="w-10 h-10 text-indigo-600 mb-6" />
-               <h3 className="text-xl font-bold text-slate-900 mb-3">Zero Lock-ups</h3>
-               <p className="text-slate-600 text-sm leading-relaxed">Your capital remains highly liquid. Withdraw your initial deposit and your accumulated interest at any time with absolutely no lock-up periods.</p>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Graphical How It Works */}
-        <div className="w-full max-w-7xl mb-32 relative">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">How Your Money Works</h2>
-            <p className="text-slate-500 max-w-2xl mx-auto">A fully automated, non-custodial process. You always maintain full control of your assets.</p>
-          </div>
-          
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0 relative z-10">
-            {/* Step 1 */}
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="flex-1 w-full flex flex-col items-center text-center px-4">
-              <div className="w-20 h-20 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shadow-sm mb-6 relative">
-                 <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm border-2 border-white shadow-sm">1</div>
-                 <ArrowDownToLine className="w-8 h-8 text-blue-600" />
+      <main className="flex-grow">
+        {/* Hero with Mesh Background */}
+        <section className="relative overflow-hidden bg-mesh">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(30,58,138,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(30,58,138,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+          <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-24">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-center max-w-4xl mx-auto mb-16">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-primary text-sm font-semibold mb-8 border border-blue-100">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 pulse-dot" />
+                Live — Tracking {protocols} Protocols Across {chains} Networks
               </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-2">Deposit Assets</h4>
-              <p className="text-sm text-slate-600">Connect your Web3 wallet and deposit stablecoins or crypto into our secure smart vaults.</p>
+              <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.1]">
+                Maximize Your <br/><span className="text-gradient">DeFi Yields.</span>
+              </h1>
+              <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed mb-10">
+                The intelligent yield aggregator that finds, compares, and auto-compounds the highest returning opportunities across all major DeFi protocols.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#markets" className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-primary/20 transition-all hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98]">
+                  <Sparkles className="w-5 h-5" /> Explore Markets
+                </a>
+                <a href="#how-it-works" className="inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-700 font-semibold px-8 py-4 rounded-xl border border-slate-200 shadow-sm transition-all">
+                  How It Works <ChevronRight className="w-4 h-4" />
+                </a>
+              </div>
             </motion.div>
 
-            {/* Connector */}
-            <div className="hidden md:block flex-none w-16 h-[2px] bg-slate-300 relative -mt-20">
-               <ArrowRight className="absolute -right-2 -top-2 w-4 h-4 text-slate-400" />
+            {/* Live Stats Bar */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.5 }} className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+              {[
+                { label: 'Total Value Locked', value: <AnimatedCounter target={Math.round(totalTVL / 1e9)} prefix="$" suffix="B+" />, icon: <TrendingUp className="w-5 h-5 text-blue-500" /> },
+                { label: 'Protocols Tracked', value: <AnimatedCounter target={protocols} suffix="+" />, icon: <Globe className="w-5 h-5 text-indigo-500" /> },
+                { label: 'Avg. Net APY', value: <AnimatedCounter target={Math.round(avgAPY)} suffix="%" />, icon: <BarChart3 className="w-5 h-5 text-emerald-500" /> },
+                { label: 'Networks Covered', value: <AnimatedCounter target={chains} />, icon: <Layers className="w-5 h-5 text-purple-500" /> },
+              ].map((stat, i) => (
+                <div key={i} className="glass-card px-5 py-4 text-center hover:!transform-none">
+                  <div className="flex items-center justify-center gap-2 mb-2">{stat.icon}<span className="text-xs font-medium text-slate-400 uppercase tracking-wider">{stat.label}</span></div>
+                  <div className="text-2xl font-bold font-mono text-slate-900">{stat.value}</div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Features */}
+        <section id="features" className="py-24 px-6 bg-white">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">Platform Advantages</p>
+              <h2 className="text-4xl font-bold text-slate-900 mb-4">Built for Serious Investors</h2>
+              <p className="text-slate-500 max-w-xl mx-auto">Every feature is designed to maximize returns while minimizing risk.</p>
             </div>
-
-            {/* Step 2 */}
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="flex-1 w-full flex flex-col items-center text-center px-4">
-              <div className="w-20 h-20 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shadow-sm mb-6 relative">
-                 <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm border-2 border-white shadow-sm">2</div>
-                 <RefreshCw className="w-8 h-8 text-emerald-600" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-2">Auto-Compound</h4>
-              <p className="text-sm text-slate-600">Our contracts automatically harvest yields and restake them daily to drastically accelerate your APY.</p>
-            </motion.div>
-
-            {/* Connector */}
-            <div className="hidden md:block flex-none w-16 h-[2px] bg-slate-300 relative -mt-20">
-               <ArrowRight className="absolute -right-2 -top-2 w-4 h-4 text-slate-400" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                { icon: <BarChart3 className="w-7 h-7" />, color: 'blue', title: 'Highest Market Yields', desc: 'Our aggregator scans Aave, Curve, Pendle, and dozens of protocols in real-time to surface the absolute highest returns available in DeFi.', tag: 'Real-Time Scanning' },
+                { icon: <ShieldCheck className="w-7 h-7" />, color: 'emerald', title: 'Audited & Secure', desc: 'Every pool listed has passed rigorous smart contract audits by firms like OpenZeppelin and Trail of Bits. We never list unverified protocols.', tag: 'Triple-Audited' },
+                { icon: <LockOpen className="w-7 h-7" />, color: 'indigo', title: 'Instant Liquidity', desc: 'Zero lock-up periods. Withdraw your initial deposit and all accumulated interest instantly, directly to your wallet, at any time.', tag: 'No Lock-ups' },
+              ].map((f, i) => (
+                <motion.div key={i} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="gradient-border shadow-sm hover:shadow-xl transition-all duration-300 group">
+                  <div className="p-8 pt-10">
+                    <div className={`w-14 h-14 rounded-2xl bg-${f.color}-50 text-${f.color}-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>{f.icon}</div>
+                    <span className={`text-xs font-bold uppercase tracking-wider text-${f.color}-500 mb-3 block`}>{f.tag}</span>
+                    <h3 className="text-xl font-bold text-slate-900 mb-3">{f.title}</h3>
+                    <p className="text-slate-500 text-sm leading-relaxed">{f.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
-
-            {/* Step 3 */}
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="flex-1 w-full flex flex-col items-center text-center px-4">
-              <div className="w-20 h-20 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shadow-sm mb-6 relative">
-                 <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-sm border-2 border-white shadow-sm">3</div>
-                 <HandCoins className="w-8 h-8 text-indigo-600" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-2">Instant Withdrawal</h4>
-              <p className="text-sm text-slate-600">Withdraw your original capital plus all compounded interest instantly directly to your wallet.</p>
-            </motion.div>
           </div>
-        </div>
+        </section>
+
+        {/* How It Works */}
+        <section id="how-it-works" className="py-24 px-6 bg-mesh relative">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-20">
+              <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">Simple Process</p>
+              <h2 className="text-4xl font-bold text-slate-900 mb-4">How Your Money Grows</h2>
+              <p className="text-slate-500 max-w-xl mx-auto">A fully automated, non-custodial process. You maintain full control at every step.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+              <div className="hidden md:block absolute top-16 left-[20%] right-[20%] h-[2px] bg-gradient-to-r from-blue-200 via-emerald-200 to-indigo-200 z-0" />
+              {[
+                { step: 1, icon: <ArrowDownToLine className="w-8 h-8" />, color: 'blue', title: 'Deposit Assets', desc: 'Connect your Web3 wallet (MetaMask, WalletConnect, Coinbase) and deposit stablecoins or crypto into a secure smart vault of your choice.' },
+                { step: 2, icon: <RefreshCw className="w-8 h-8" />, color: 'emerald', title: 'Auto-Compound', desc: 'Our smart contracts automatically harvest yields every 24 hours and restake them — exponentially accelerating your effective APY over time.' },
+                { step: 3, icon: <HandCoins className="w-8 h-8" />, color: 'indigo', title: 'Withdraw Anytime', desc: 'Withdraw your original capital plus all compounded interest instantly. No waiting periods, no penalties, no hidden fees. It goes straight to your wallet.' },
+              ].map((s, i) => (
+                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.15 }} className="relative z-10 text-center">
+                  <div className={`w-20 h-20 rounded-2xl bg-white border-2 border-${s.color}-100 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-${s.color}-500/10 relative`}>
+                    <div className={`absolute -top-3 -right-3 w-8 h-8 rounded-full bg-${s.color}-600 text-white font-bold flex items-center justify-center text-sm shadow-md`}>{s.step}</div>
+                    <span className={`text-${s.color}-600`}>{s.icon}</span>
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-900 mb-3">{s.title}</h4>
+                  <p className="text-sm text-slate-500 leading-relaxed max-w-xs mx-auto">{s.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* Data Table Section */}
-        <div className="w-full max-w-7xl">
-          <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center mb-6 gap-4">
-            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <Layers className="text-primary w-5 h-5"/> Live Yield Markets
-            </h2>
-            <div className="relative w-full sm:w-auto">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input 
-                type="text"
-                placeholder="Search USDC, Aave..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-white border border-slate-300 rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-slate-900 w-full sm:w-72 transition-all placeholder:text-slate-400 shadow-sm"
-              />
+        <section id="markets" className="py-24 px-6 bg-white">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center mb-8 gap-4">
+              <div>
+                <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-1">Live Data</p>
+                <h2 className="text-3xl font-bold text-slate-900">Yield Markets</h2>
+              </div>
+              <div className="relative w-full sm:w-auto">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input type="text" placeholder="Search protocols, assets..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-slate-900 w-full sm:w-80 transition-all placeholder:text-slate-400" />
+              </div>
+            </div>
+
+            <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-100 bg-slate-50/80 text-xs uppercase tracking-wider text-slate-400">
+                      <th className="px-6 py-4 font-semibold">Protocol</th>
+                      <th className="px-6 py-4 font-semibold">Asset</th>
+                      <th className="px-6 py-4 font-semibold">Network</th>
+                      <th className="px-6 py-4 font-semibold">Net APY</th>
+                      <th className="px-6 py-4 font-semibold">TVL</th>
+                      <th className="px-6 py-4 font-semibold">Risk</th>
+                      <th className="px-6 py-4 font-semibold text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {filteredPools.map((pool) => (
+                      <tr key={pool.pool} onClick={() => router.push(`/pools/${pool.pool}/`)} className="group hover:bg-blue-50/40 transition-all cursor-pointer">
+                        <td className="px-6 py-5">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 group-hover:bg-primary group-hover:text-white transition-colors">{pool.project.substring(0, 2).toUpperCase()}</div>
+                            <span className="font-semibold text-slate-900">{pool.project}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-5"><span className="font-mono text-sm font-medium text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">{pool.symbol}</span></td>
+                        <td className="px-6 py-5"><span className="text-xs font-medium text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">{pool.chain}</span></td>
+                        <td className="px-6 py-5"><span className="font-mono text-emerald-600 font-bold text-lg">{pool.apy.toFixed(2)}%</span></td>
+                        <td className="px-6 py-5 font-mono text-sm text-slate-500">${(pool.tvlUsd / 1e6).toFixed(1)}M</td>
+                        <td className="px-6 py-5">
+                          <span className={`text-xs px-2.5 py-1 rounded-lg font-semibold ${pool.riskLevel === 'Low' ? 'bg-emerald-50 text-emerald-600' : pool.riskLevel === 'Medium' ? 'bg-amber-50 text-amber-600' : 'bg-rose-50 text-rose-600'}`}>{pool.riskLevel}</span>
+                        </td>
+                        <td className="px-6 py-5 text-right">
+                          <span className="inline-flex items-center gap-1 text-sm font-medium text-slate-400 group-hover:text-primary transition-colors">Deposit <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {filteredPools.length === 0 && <div className="p-16 text-center text-slate-400">No pools found matching your search.</div>}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="bg-slate-900 text-white py-16 px-6">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center"><Activity className="text-white w-4 h-4" /></div>
+                <span className="font-bold text-xl">Yield<span className="text-blue-400">Pulse</span></span>
+              </div>
+              <p className="text-slate-400 text-sm leading-relaxed max-w-sm">The intelligent yield aggregator for DeFi. We find, compare, and auto-compound the best opportunities across all major protocols.</p>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-slate-400">Platform</h4>
+              <ul className="space-y-3 text-sm text-slate-300">
+                <li><a href="#markets" className="hover:text-white transition-colors">Markets</a></li>
+                <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
+                <li><a href="#how-it-works" className="hover:text-white transition-colors">How It Works</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-slate-400">Resources</h4>
+              <ul className="space-y-3 text-sm text-slate-300">
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-1">Documentation <ExternalLink className="w-3 h-3" /></a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-1">GitHub <ExternalLink className="w-3 h-3" /></a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-1">Security Audits <ExternalLink className="w-3 h-3" /></a></li>
+              </ul>
             </div>
           </div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-            className="glass-card overflow-hidden"
-          >
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-border bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
-                    <th className="px-6 py-4 font-semibold">Protocol</th>
-                    <th className="px-6 py-4 font-semibold">Asset</th>
-                    <th className="px-6 py-4 font-semibold">Network</th>
-                    <th className="px-6 py-4 font-semibold">Net APY</th>
-                    <th className="px-6 py-4 font-semibold">TVL (USD)</th>
-                    <th className="px-6 py-4 font-semibold">Risk Tier</th>
-                    <th className="px-6 py-4 font-semibold text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {filteredPools.map((pool, i) => (
-                    <tr 
-                      key={pool.pool}
-                      onClick={() => router.push(`/pools/${pool.pool}`)}
-                      className="group hover:bg-slate-50 transition-colors cursor-pointer"
-                    >
-                      <td className="px-6 py-4">
-                        <div className="font-semibold text-slate-900 group-hover:text-primary transition-colors">{pool.project}</div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="font-mono text-sm font-medium text-slate-700 bg-slate-100 border border-slate-200 inline-block px-2.5 py-1 rounded">{pool.symbol}</div>
-                      </td>
-                      <td className="px-6 py-4">
-                         <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2.5 py-1 rounded border border-blue-200">{pool.chain}</span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="font-mono text-emerald-600 font-bold text-base">{pool.apy.toFixed(2)}%</div>
-                      </td>
-                      <td className="px-6 py-4 font-mono text-sm text-slate-500">
-                        ${(pool.tvlUsd / 1000000).toFixed(1)}M
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`text-xs px-2.5 py-1 rounded font-semibold border ${
-                          pool.riskLevel === 'Low' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' :
-                          pool.riskLevel === 'Medium' ? 'bg-amber-50 text-amber-600 border-amber-200' :
-                          'bg-rose-50 text-rose-600 border-rose-200'
-                        }`}>
-                          {pool.riskLevel}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                         <button className="text-slate-500 group-hover:text-primary transition-colors flex items-center justify-end gap-1 w-full text-sm font-medium">
-                            Trade <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity translate-x-[-10px] group-hover:translate-x-0 duration-300" />
-                         </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {filteredPools.length === 0 && (
-                <div className="p-12 text-center text-slate-500">No pools found matching your search criteria.</div>
-              )}
-            </div>
-          </motion.div>
-        </div>
+          <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
+            © 2025 YieldPulse. All rights reserved. Smart contract interactions carry inherent risk.
+          </div>
+        </footer>
       </main>
     </div>
   );
