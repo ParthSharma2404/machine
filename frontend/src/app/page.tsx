@@ -29,10 +29,24 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [loadingPool, setLoadingPool] = useState<string | null>(null);
   
-  const filteredPools = poolsData.filter(pool => 
-    pool.project.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    pool.symbol.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filtering & Pagination State
+  const [visibleCount, setVisibleCount] = useState(20);
+  const [networkFilter, setNetworkFilter] = useState('All');
+  const [protocolFilter, setProtocolFilter] = useState('All');
+
+  // Extract unique filter options
+  const uniqueNetworks = Array.from(new Set(poolsData.map(p => p.chain))).sort();
+  const uniqueProtocols = Array.from(new Set(poolsData.map(p => p.project))).sort();
+
+  const filteredPools = poolsData.filter(pool => {
+    const matchesSearch = pool.project.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          pool.symbol.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesNetwork = networkFilter === 'All' || pool.chain === networkFilter;
+    const matchesProtocol = protocolFilter === 'All' || pool.project === protocolFilter;
+    return matchesSearch && matchesNetwork && matchesProtocol;
+  });
+
+  const visiblePools = filteredPools.slice(0, visibleCount);
 
   const totalTVL = poolsData.reduce((sum, p) => sum + p.tvlUsd, 0);
   const top100Pools = [...poolsData].sort((a, b) => b.apy - a.apy).slice(0, 100);
@@ -191,9 +205,23 @@ export default function Home() {
                 <p className="text-sm font-semibold text-emerald-600 uppercase tracking-wider mb-1">Live Data</p>
                 <h2 className="text-3xl font-bold text-slate-900">Yield Markets</h2>
               </div>
-              <div className="relative w-full sm:w-auto">
-                <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input type="text" placeholder="Search protocols, assets..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-slate-900 w-full sm:w-80 transition-all placeholder:text-slate-400" />
+              <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto mt-4 sm:mt-0">
+                <div className="relative w-full sm:w-auto">
+                  <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input type="text" placeholder="Search assets..." value={searchTerm} onChange={(e) => {setSearchTerm(e.target.value); setVisibleCount(20);}} className="bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-slate-900 w-full sm:w-64 transition-all placeholder:text-slate-400" />
+                </div>
+                
+                <div className="flex w-full sm:w-auto gap-3">
+                  <select value={networkFilter} onChange={(e) => {setNetworkFilter(e.target.value); setVisibleCount(20);}} className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 w-full sm:w-auto cursor-pointer outline-none">
+                    <option value="All">All Networks</option>
+                    {uniqueNetworks.map(net => <option key={net} value={net}>{net}</option>)}
+                  </select>
+
+                  <select value={protocolFilter} onChange={(e) => {setProtocolFilter(e.target.value); setVisibleCount(20);}} className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 w-full sm:w-auto cursor-pointer outline-none">
+                    <option value="All">All Protocols</option>
+                    {uniqueProtocols.map(prot => <option key={prot} value={prot}>{prot}</option>)}
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -213,7 +241,7 @@ export default function Home() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
-                    {filteredPools.map((pool) => (
+                    {visiblePools.map((pool) => (
                       <tr key={pool.pool} onMouseEnter={() => router.prefetch(`/pools/${pool.pool}/`)} onClick={() => { setLoadingPool(pool.pool); setTimeout(() => router.push(`/pools/${pool.pool}/`), 10); }} className={`group transition-all cursor-pointer ${loadingPool === pool.pool ? 'bg-emerald-50 pointer-events-none' : 'hover:bg-slate-50/80'}`}>
                         <td className="px-6 py-6">
                           <div className="flex items-center gap-4">
@@ -250,7 +278,7 @@ export default function Home() {
 
               {/* Mobile Card View */}
               <div className="md:hidden divide-y divide-slate-100">
-                {filteredPools.map((pool) => (
+                {visiblePools.map((pool) => (
                   <div key={pool.pool} onClick={() => { setLoadingPool(pool.pool); setTimeout(() => router.push(`/pools/${pool.pool}/`), 10); }} className={`p-5 transition-all cursor-pointer flex flex-col gap-4 ${loadingPool === pool.pool ? 'bg-emerald-50 pointer-events-none' : 'hover:bg-slate-50'}`}>
                     <div className="flex justify-between items-start">
                       <div className="flex items-center gap-3">
@@ -295,6 +323,15 @@ export default function Home() {
               </div>
 
               {filteredPools.length === 0 && <div className="p-16 text-center text-slate-500">No pools found matching your search.</div>}
+              
+              {/* Load More Button */}
+              {visibleCount < filteredPools.length && (
+                <div className="p-6 text-center border-t border-slate-100 bg-slate-50/50">
+                  <button onClick={() => setVisibleCount(prev => prev + 20)} className="px-8 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:border-emerald-300 hover:text-emerald-600 shadow-sm transition-all">
+                    Load More Pools
+                  </button>
+                </div>
+              )}
             </motion.div>
           </div>
         </section>
