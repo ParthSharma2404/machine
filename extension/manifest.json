@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "YieldPulse Social Manager",
+  "version": "1.0.0",
+  "description": "Automated, API-free X (Twitter) marketing bot for YieldPulse.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "YieldPulse Bot"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "*://*.x.com/*",
+    "*://*.twitter.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.x.com/intent/tweet*",
+        "*://*.twitter.com/intent/tweet*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
