@@ -39,10 +39,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       statusDiv.innerText = 'Generating custom graphic...';
 
-      // 4. Generate the beautiful image and copy to clipboard
-      await generateImageToClipboard(topPools);
+      // 4. Generate the beautiful image and DOWNLOAD it!
+      const dataUrl = await generateImageAndDownload(topPools);
+      
+      // Trigger the download via Chrome API
+      chrome.downloads.download({
+        url: dataUrl,
+        filename: "YeildPulse_Market_Update.png"
+      });
 
-      statusDiv.innerText = 'Image copied! Opening X...';
+      statusDiv.innerText = 'Image downloaded! Opening X...';
 
       // 5. Open X (Twitter) Intent URL
       const encodedTweet = encodeURIComponent(tweetText);
@@ -55,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         postBtn.disabled = false;
         spinner.style.display = 'none';
         btnText.innerText = 'Generate & Auto-Post';
-        statusDiv.innerText = '✅ Ready! Press Ctrl+V on Twitter to paste the image!';
+        statusDiv.innerText = '✅ Drag the downloaded image into the Twitter box!';
         statusDiv.style.color = '#10b981';
       }, 1000);
 
@@ -71,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- Graphics Engine ---
-async function generateImageToClipboard(topPools) {
+async function generateImageAndDownload(topPools) {
   return new Promise((resolve, reject) => {
     const canvas = document.createElement('canvas');
     canvas.width = 1200;
@@ -141,17 +147,7 @@ async function generateImageToClipboard(topPools) {
     ctx.font = '30px Arial';
     ctx.fillText('Data analyzed in real-time at www.yeildpulse.xyz', 60, 630);
 
-    // 7. Convert to Blob and write to Clipboard
-    canvas.toBlob(async (blob) => {
-      try {
-        const item = new ClipboardItem({ 'image/png': blob });
-        await navigator.clipboard.write([item]);
-        resolve();
-      } catch (err) {
-        console.error("Clipboard write failed: ", err);
-        // Fallback or just resolve anyway so the flow continues
-        resolve();
-      }
-    }, 'image/png');
+    // 7. Convert to Data URL and return
+    resolve(canvas.toDataURL('image/png'));
   });
 }
