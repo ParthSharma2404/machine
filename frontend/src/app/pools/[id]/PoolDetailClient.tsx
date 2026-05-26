@@ -270,7 +270,7 @@ export default function PoolDetailClient({ pool }: { pool: any }) {
           <div className="flex items-center gap-2 sm:gap-4 shrink overflow-hidden">
             <button onClick={() => router.back()} className="shrink-0 w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100 flex items-center justify-center transition-colors"><ArrowLeft className="w-4 h-4 text-slate-600" /></button>
             <div className="flex items-center gap-2 cursor-pointer shrink overflow-hidden" onClick={() => router.push('/')}>
-              <div className="shrink-0 w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center shadow-[0_2px_10px_rgba(16,185,129,0.3)]"><Activity className="text-white w-4 h-4" /></div>
+              <img src="/logo.png" alt="YeildPulse Logo" className="shrink-0 w-8 h-8 rounded-lg shadow-[0_2px_10px_rgba(16,185,129,0.3)]" />
               <span className="font-bold text-lg sm:text-xl tracking-tight text-slate-900 truncate">Yeild<span className="text-emerald-600">Pulse</span></span>
             </div>
           </div>

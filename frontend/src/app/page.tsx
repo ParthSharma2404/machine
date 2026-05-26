@@ -46,9 +46,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-border px-4 sm:px-6 py-3 shadow-sm">
         <div className="max-w-7xl mx-auto flex justify-between items-center gap-2">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center shrink-0 shadow-[0_2px_10px_rgba(16,185,129,0.3)]">
-              <Activity className="text-white w-4 h-4" />
-            </div>
+            <img src="/logo.png" alt="YeildPulse Logo" className="w-8 h-8 rounded-lg shrink-0 shadow-[0_2px_10px_rgba(16,185,129,0.3)]" />
             <span className="font-bold text-lg sm:text-xl tracking-tight text-slate-900 truncate">
               Yeild<span className="text-emerald-600">Pulse</span>
             </span>
