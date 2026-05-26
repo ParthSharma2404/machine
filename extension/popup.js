@@ -37,22 +37,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
       tweetText += `\n🌐 www.yeildpulse.xyz\n#DeFi #YieldPulse`;
 
-      statusDiv.innerText = 'Opening X...';
+      statusDiv.innerText = 'Generating custom graphic...';
 
-      // 4. Open X (Twitter) Intent URL which automatically pre-fills the tweet!
+      // 4. Generate the beautiful image and copy to clipboard
+      await generateImageToClipboard(topPools);
+
+      statusDiv.innerText = 'Image copied! Opening X...';
+
+      // 5. Open X (Twitter) Intent URL
       const encodedTweet = encodeURIComponent(tweetText);
       const twitterUrl = `https://x.com/intent/tweet?text=${encodedTweet}`;
       
-      // We open it in a new tab. The content.js script will inject into this tab to click "Post".
       chrome.tabs.create({ url: twitterUrl });
 
-      // Reset UI
+      // Reset UI and tell user what to do
       setTimeout(() => {
         postBtn.disabled = false;
         spinner.style.display = 'none';
         btnText.innerText = 'Generate & Auto-Post';
-        statusDiv.style.display = 'none';
-      }, 2000);
+        statusDiv.innerText = '✅ Ready! Press Ctrl+V on Twitter to paste the image!';
+        statusDiv.style.color = '#10b981';
+      }, 1000);
 
     } catch (error) {
       console.error(error);
@@ -64,3 +69,89 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// --- Graphics Engine ---
+async function generateImageToClipboard(topPools) {
+  return new Promise((resolve, reject) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1200;
+    canvas.height = 675; // Standard Twitter aspect ratio
+    const ctx = canvas.getContext('2d');
+
+    // 1. Background
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // 2. Draw subtle 'Green Grid' pattern
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < canvas.width; x += 40) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+    }
+    for (let y = 0; y < canvas.height; y += 40) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+    }
+
+    // 3. Top Banner (Emerald)
+    ctx.fillStyle = '#10b981';
+    ctx.fillRect(0, 0, canvas.width, 120);
+
+    // 4. Title Text
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 50px Arial';
+    ctx.fillText('YeildPulse Analytics', 60, 80);
+
+    ctx.fillStyle = '#0f172a';
+    ctx.font = 'bold 65px Arial';
+    ctx.fillText('Top Market Yields', 60, 230);
+
+    // 5. Draw the Top Pools
+    let startY = 350;
+    const medals = ['🥇', '🥈', '🥉'];
+    
+    topPools.forEach((pool, index) => {
+      const symbol = pool.symbol.split('-').map(s => `$${s}`).join('/');
+      let projectName = pool.project.charAt(0).toUpperCase() + pool.project.slice(1).replace('-', ' ');
+      if(projectName.includes(" slipstream")) projectName = projectName.replace(" slipstream", "");
+
+      // Draw Pool Background Box
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = 'rgba(0,0,0,0.05)';
+      ctx.shadowBlur = 10;
+      ctx.shadowOffsetY = 4;
+      ctx.fillRect(60, startY - 60, 1080, 90);
+      ctx.shadowColor = 'transparent'; // Reset shadow
+
+      // Draw text
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 40px Arial';
+      ctx.fillText(`${medals[index]} ${projectName} (${symbol})`, 90, startY);
+
+      // Draw APY (Right aligned)
+      ctx.fillStyle = '#10b981';
+      const apyText = `${pool.apy.toFixed(1)}% APY`;
+      const textWidth = ctx.measureText(apyText).width;
+      ctx.fillText(apyText, 1140 - textWidth, startY);
+
+      startY += 120;
+    });
+
+    // 6. Footer URL
+    ctx.fillStyle = '#64748b';
+    ctx.font = '30px Arial';
+    ctx.fillText('Data analyzed in real-time at www.yeildpulse.xyz', 60, 630);
+
+    // 7. Convert to Blob and write to Clipboard
+    canvas.toBlob(async (blob) => {
+      try {
+        const item = new ClipboardItem({ 'image/png': blob });
+        await navigator.clipboard.write([item]);
+        resolve();
+      } catch (err) {
+        console.error("Clipboard write failed: ", err);
+        // Fallback or just resolve anyway so the flow continues
+        resolve();
+      }
+    }, 'image/png');
+  });
+}

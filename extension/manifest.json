@@ -11,7 +11,8 @@
     "activeTab",
     "scripting",
     "storage",
-    "tabs"
+    "tabs",
+    "clipboardWrite"
   ],
   "background": {
     "service_worker": "background.js"
