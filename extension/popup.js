@@ -22,17 +22,20 @@ document.addEventListener('DOMContentLoaded', () => {
       const validPools = poolsData.filter(p => p.tvlUsd > 1000000 && p.apy > 0 && p.apy < 300);
       const topPools = validPools.sort((a, b) => b.apy - a.apy).slice(0, 3);
 
-      // 3. Generate "Top Notch" Tweet Copy
+      // 3. Generate "Top Notch" Tweet Copy (Shortened for 280 character limit)
       const medals = ['🥇', '🥈', '🥉'];
-      let tweetText = `Daily Market Intelligence 🧠 | YeildPulse Analytics\nTracking the most capital-efficient liquidity pools across DeFi.\n\n`;
+      let tweetText = `Top Market Yields 📊 | YeildPulse\n\n`;
 
       topPools.forEach((pool, index) => {
-        const symbol = pool.symbol.split('-').map(s => `$${s}`).join(' / ');
-        const projectName = pool.project.charAt(0).toUpperCase() + pool.project.slice(1).replace('-', ' ');
-        tweetText += `${medals[index]} ${projectName} (${symbol}) — ${pool.apy.toFixed(1)}% Net APY\n`;
+        const symbol = pool.symbol.split('-').map(s => `$${s}`).join('/');
+        let projectName = pool.project.charAt(0).toUpperCase() + pool.project.slice(1).replace('-', ' ');
+        // Shorten long project names
+        if(projectName.includes(" slipstream")) projectName = projectName.replace(" slipstream", "");
+        
+        tweetText += `${medals[index]} ${projectName} (${symbol}) - ${Math.round(pool.apy)}% APY\n`;
       });
 
-      tweetText += `\nData analyzed in real-time. Discover 100+ market opportunities instantly:\n🌐 www.yeildpulse.xyz\n\n#DeFi #LiquidityProviding #YeildPulse #CryptoMarket`;
+      tweetText += `\n🌐 www.yeildpulse.xyz\n#DeFi #YieldPulse`;
 
       statusDiv.innerText = 'Opening X...';
 
