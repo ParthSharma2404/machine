@@ -80,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
 async function generateImageAndDownload(topPools) {
   return new Promise((resolve, reject) => {
     const canvas = document.createElement('canvas');
-    canvas.width = 1200;
-    canvas.height = 675; // Standard Twitter aspect ratio
+    canvas.width = 1080;
+    canvas.height = 1080; // Square, perfect for Twitter & Instagram
     const ctx = canvas.getContext('2d');
 
     // 1. Background
@@ -89,30 +89,26 @@ async function generateImageAndDownload(topPools) {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // 2. Draw subtle 'Green Grid' pattern
-    ctx.strokeStyle = '#e2e8f0';
-    ctx.lineWidth = 1;
-    for (let x = 0; x < canvas.width; x += 40) {
+    ctx.strokeStyle = '#f1f5f9';
+    ctx.lineWidth = 2;
+    for (let x = 0; x < canvas.width; x += 60) {
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
     }
-    for (let y = 0; y < canvas.height; y += 40) {
+    for (let y = 0; y < canvas.height; y += 60) {
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
     }
 
-    // 3. Top Banner (Emerald)
+    // 3. Header
     ctx.fillStyle = '#10b981';
-    ctx.fillRect(0, 0, canvas.width, 120);
-
-    // 4. Title Text
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 50px Arial';
-    ctx.fillText('YeildPulse Analytics', 60, 80);
+    ctx.font = 'bold 45px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillText('YEILDPULSE ANALYTICS', 80, 120);
 
     ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold 65px Arial';
-    ctx.fillText('Top Market Yields', 60, 230);
+    ctx.font = 'bold 80px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillText('Top Market Yields', 80, 220);
 
-    // 5. Draw the Top Pools
-    let startY = 350;
+    // 4. Draw the Top Pools (Cards)
+    let startY = 320;
     const medals = ['🥇', '🥈', '🥉'];
     
     topPools.forEach((pool, index) => {
@@ -120,34 +116,45 @@ async function generateImageAndDownload(topPools) {
       let projectName = pool.project.charAt(0).toUpperCase() + pool.project.slice(1).replace('-', ' ');
       if(projectName.includes(" slipstream")) projectName = projectName.replace(" slipstream", "");
 
-      // Draw Pool Background Box
+      // Shadow
+      ctx.shadowColor = 'rgba(100, 116, 139, 0.15)';
+      ctx.shadowBlur = 20;
+      ctx.shadowOffsetY = 10;
+      
+      // Card Background (Rounded Rectangle)
       ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = 'rgba(0,0,0,0.05)';
-      ctx.shadowBlur = 10;
-      ctx.shadowOffsetY = 4;
-      ctx.fillRect(60, startY - 60, 1080, 90);
+      ctx.beginPath();
+      ctx.roundRect(80, startY, 920, 160, 24);
+      ctx.fill();
       ctx.shadowColor = 'transparent'; // Reset shadow
 
-      // Draw text
+      // Pool Name
       ctx.fillStyle = '#0f172a';
-      ctx.font = 'bold 40px Arial';
-      ctx.fillText(`${medals[index]} ${projectName} (${symbol})`, 90, startY);
+      ctx.font = 'bold 45px -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.fillText(`${medals[index]} ${projectName}`, 130, startY + 70);
 
-      // Draw APY (Right aligned)
+      // Pool Symbols
+      ctx.fillStyle = '#64748b';
+      ctx.font = '35px -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.fillText(symbol, 130, startY + 125);
+
+      // APY Text
       ctx.fillStyle = '#10b981';
-      const apyText = `${pool.apy.toFixed(1)}% APY`;
+      ctx.font = 'bold 65px -apple-system, BlinkMacSystemFont, sans-serif';
+      const apyText = `${pool.apy.toFixed(1)}%`;
       const textWidth = ctx.measureText(apyText).width;
-      ctx.fillText(apyText, 1140 - textWidth, startY);
+      ctx.fillText(apyText, 960 - textWidth, startY + 105);
 
-      startY += 120;
+      startY += 200;
     });
 
-    // 6. Footer URL
-    ctx.fillStyle = '#64748b';
-    ctx.font = '30px Arial';
-    ctx.fillText('Data analyzed in real-time at www.yeildpulse.xyz', 60, 630);
+    // 5. Clean Footer
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '35px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Live data available at www.yeildpulse.xyz', canvas.width / 2, 1000);
 
-    // 7. Convert to Data URL and return
+    // 6. Convert to Data URL and return
     resolve(canvas.toDataURL('image/png'));
   });
 }
