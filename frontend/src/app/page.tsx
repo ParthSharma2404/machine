@@ -33,6 +33,7 @@ export default function Home() {
   const [visibleCount, setVisibleCount] = useState(20);
   const [networkFilter, setNetworkFilter] = useState('All');
   const [protocolFilter, setProtocolFilter] = useState('All');
+  const [scoreFilter, setScoreFilter] = useState('All');
 
   // Extract unique filter options
   const uniqueNetworks = Array.from(new Set(poolsData.map(p => p.chain))).sort();
@@ -43,7 +44,8 @@ export default function Home() {
                           pool.symbol.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesNetwork = networkFilter === 'All' || pool.chain === networkFilter;
     const matchesProtocol = protocolFilter === 'All' || pool.project === protocolFilter;
-    return matchesSearch && matchesNetwork && matchesProtocol;
+    const matchesScore = scoreFilter === 'All' || pool.yieldScore >= parseInt(scoreFilter);
+    return matchesSearch && matchesNetwork && matchesProtocol && matchesScore;
   });
 
   const visiblePools = filteredPools.slice(0, visibleCount);
@@ -211,7 +213,7 @@ export default function Home() {
                   <input type="text" placeholder="Search assets..." value={searchTerm} onChange={(e) => {setSearchTerm(e.target.value); setVisibleCount(20);}} className="bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-slate-900 w-full sm:w-64 transition-all placeholder:text-slate-400" />
                 </div>
                 
-                <div className="flex w-full sm:w-auto gap-3">
+                <div className="flex flex-wrap w-full sm:w-auto gap-3">
                   <select value={networkFilter} onChange={(e) => {setNetworkFilter(e.target.value); setVisibleCount(20);}} className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 w-full sm:w-auto cursor-pointer outline-none">
                     <option value="All">All Networks</option>
                     {uniqueNetworks.map(net => <option key={net} value={net}>{net}</option>)}
@@ -220,6 +222,14 @@ export default function Home() {
                   <select value={protocolFilter} onChange={(e) => {setProtocolFilter(e.target.value); setVisibleCount(20);}} className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 w-full sm:w-auto cursor-pointer outline-none">
                     <option value="All">All Protocols</option>
                     {uniqueProtocols.map(prot => <option key={prot} value={prot}>{prot}</option>)}
+                  </select>
+
+                  <select value={scoreFilter} onChange={(e) => {setScoreFilter(e.target.value); setVisibleCount(20);}} className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 w-full sm:w-auto cursor-pointer outline-none">
+                    <option value="All">All Scores</option>
+                    <option value="90">Elite (90+)</option>
+                    <option value="80">High (80+)</option>
+                    <option value="70">Good (70+)</option>
+                    <option value="60">Fair (60+)</option>
                   </select>
                 </div>
               </div>
