@@ -242,7 +242,7 @@ export default function Home() {
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {visiblePools.map((pool) => (
-                      <tr key={pool.pool} onMouseEnter={() => router.prefetch(`/pools/${pool.pool}/`)} onClick={() => { setLoadingPool(pool.pool); setTimeout(() => router.push(`/pools/${pool.pool}/`), 10); }} className={`group transition-all cursor-pointer ${loadingPool === pool.pool ? 'bg-emerald-50 pointer-events-none' : 'hover:bg-slate-50/80'}`}>
+                      <tr key={pool.pool} onClick={() => { setLoadingPool(pool.pool); setTimeout(() => router.push(`/pools/${pool.pool}`), 10); }} className={`group transition-all cursor-pointer ${loadingPool === pool.pool ? 'bg-emerald-50 pointer-events-none' : 'hover:bg-slate-50/80'}`}>
                         <td className="px-6 py-6">
                           <div className="flex items-center gap-4">
                             <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-500 group-hover:bg-emerald-100 group-hover:text-emerald-700 group-hover:border-emerald-200 transition-all">{pool.project.substring(0, 2).toUpperCase()}</div>
@@ -279,7 +279,7 @@ export default function Home() {
               {/* Mobile Card View */}
               <div className="md:hidden divide-y divide-slate-100">
                 {visiblePools.map((pool) => (
-                  <div key={pool.pool} onClick={() => { setLoadingPool(pool.pool); setTimeout(() => router.push(`/pools/${pool.pool}/`), 10); }} className={`p-5 transition-all cursor-pointer flex flex-col gap-4 ${loadingPool === pool.pool ? 'bg-emerald-50 pointer-events-none' : 'hover:bg-slate-50'}`}>
+                  <div key={pool.pool} onClick={() => { setLoadingPool(pool.pool); setTimeout(() => router.push(`/pools/${pool.pool}`), 10); }} className={`p-5 transition-all cursor-pointer flex flex-col gap-4 ${loadingPool === pool.pool ? 'bg-emerald-50 pointer-events-none' : 'hover:bg-slate-50'}`}>
                     <div className="flex justify-between items-start">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-500">{pool.project.substring(0, 2).toUpperCase()}</div>
